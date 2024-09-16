@@ -1,0 +1,21 @@
+
+V	java:S125U"<This block of commented-out lines of code should be removed.(å÷áşÿÿÿÿ
+E
+java:S1125f"(Remove the literal "true" boolean value.(õÁô‡8¾ø§®”/
+W	java:S125²"<This block of commented-out lines of code should be removed.(¢±Öºûÿÿÿÿ
+Q	java:S125L"<This block of commented-out lines of code should be removed.(¨æ¶¦
+L
+java:S5411H"*Use the primitive boolean expression here.(´Ñë§şÿÿÿÿ8Æ¸¬”/
+P	java:S125t"<This block of commented-out lines of code should be removed.(ä­ÓA
+Q	java:S125Z"<This block of commented-out lines of code should be removed.(çÃ°
+W	java:S125¼"<This block of commented-out lines of code should be removed.(¢±Öºûÿÿÿÿ
+Q	java:S125P"<This block of commented-out lines of code should be removed.(»ñ¦ë
+V	java:S125R"<This block of commented-out lines of code should be removed.(¥Œ†˜ÿÿÿÿÿ
+Q	java:S125b"<This block of commented-out lines of code should be removed.(ûİâƒ
+W	java:S125"<This block of commented-out lines of code should be removed.(ÑÇ±ÿÿÿÿÿ
+q
+java:S32523"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(Ø¯úÿÿÿÿ8·Ä›®”/
+[
+java:S1155f">Use isEmpty() to check whether the collection is empty or not.(õÁô‡8¾ø§®”/
+q
+java:S32526"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(›¶Íéùÿÿÿÿ8Æ¸¬”/

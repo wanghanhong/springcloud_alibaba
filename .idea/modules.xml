@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/api-common/api-common.iml" filepath="$PROJECT_DIR$/api-common/api-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-common/api-common-auth/api-common-auth.iml" filepath="$PROJECT_DIR$/api-common/api-common-auth/api-common-auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-common/api-common-core/api-common-core.iml" filepath="$PROJECT_DIR$/api-common/api-common-core/api-common-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-common/api-common-log/api-common-log.iml" filepath="$PROJECT_DIR$/api-common/api-common-log/api-common-log.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-common/api-common-redis/api-common-redis.iml" filepath="$PROJECT_DIR$/api-common/api-common-redis/api-common-redis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-common/api-common-swagger/api-common-swagger.iml" filepath="$PROJECT_DIR$/api-common/api-common-swagger/api-common-swagger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-gateway/api-gateway.iml" filepath="$PROJECT_DIR$/api-gateway/api-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-system/api-system.iml" filepath="$PROJECT_DIR$/api-system/api-system.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-system/api-system-auth/api-system-auth.iml" filepath="$PROJECT_DIR$/api-system/api-system-auth/api-system-auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-system/api-system-common/api-system-common.iml" filepath="$PROJECT_DIR$/api-system/api-system-common/api-system-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-system/api-system-manage/api-system-manage.iml" filepath="$PROJECT_DIR$/api-system/api-system-manage/api-system-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-transaction/api-transaction.iml" filepath="$PROJECT_DIR$/api-transaction/api-transaction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/brd-manage-base/brd-manage-base.iml" filepath="$PROJECT_DIR$/brd-manage-base/brd-manage-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/brd-sys/brd-sys.iml" filepath="$PROJECT_DIR$/brd-sys/brd-sys.iml" />
+      <module fileurl="file://$PROJECT_DIR$/card-manage/card-manage.iml" filepath="$PROJECT_DIR$/card-manage/card-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/card-sys/card-sys.iml" filepath="$PROJECT_DIR$/card-sys/card-sys.iml" />
+      <module fileurl="file://$PROJECT_DIR$/device-manage/device-access/device-access.iml" filepath="$PROJECT_DIR$/device-manage/device-access/device-access.iml" />
+      <module fileurl="file://$PROJECT_DIR$/device-manage/device-common-module/device-common-module.iml" filepath="$PROJECT_DIR$/device-manage/device-common-module/device-common-module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/device-manage/device-install/device-install.iml" filepath="$PROJECT_DIR$/device-manage/device-install/device-install.iml" />
+      <module fileurl="file://$PROJECT_DIR$/device-manage/device-manage.iml" filepath="$PROJECT_DIR$/device-manage/device-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/device-manage/device-message/device-message.iml" filepath="$PROJECT_DIR$/device-manage/device-message/device-message.iml" />
+      <module fileurl="file://$PROJECT_DIR$/message-manage/message-manage.iml" filepath="$PROJECT_DIR$/message-manage/message-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/publicize-manage/publicize-manage.iml" filepath="$PROJECT_DIR$/publicize-manage/publicize-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smart-fire-platform/smart-fire-platform.iml" filepath="$PROJECT_DIR$/smart-fire-platform/smart-fire-platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoke-fire-platform/smoke-fire-platform.iml" filepath="$PROJECT_DIR$/smoke-fire-platform/smoke-fire-platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/springcloud-alibaba.iml" filepath="$PROJECT_DIR$/.idea/springcloud-alibaba.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test-demo/test-demo.iml" filepath="$PROJECT_DIR$/test-demo/test-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/video-manage/video-manage.iml" filepath="$PROJECT_DIR$/video-manage/video-manage.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.ctg.ag:ctg-ag-sdk-core:2.5.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://D:/soft/15_maven/apache-maven-3.9.8/maven_repo/com/ctg/ag/ctg-ag-sdk-core/2.5.0-SNAPSHOT/ctg-ag-sdk-core-2.5.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://D:/soft/15_maven/apache-maven-3.9.8/maven_repo/com/ctg/ag/ctg-ag-sdk-core/2.5.0-SNAPSHOT/ctg-ag-sdk-core-2.5.0-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://D:/soft/15_maven/apache-maven-3.9.8/maven_repo/com/ctg/ag/ctg-ag-sdk-core/2.5.0-SNAPSHOT/ctg-ag-sdk-core-2.5.0-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

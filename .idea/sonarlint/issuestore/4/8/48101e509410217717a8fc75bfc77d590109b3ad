@@ -1,0 +1,13 @@
+
+x
+java:S1488'"]Immediately return this expression instead of assigning it to the temporary variable "iPage".(»ìº‚üÿÿÿÿ
+v
+java:S1488="[Immediately return this expression instead of assigning it to the temporary variable "res".(÷ªá…üÿÿÿÿ
+y
+java:S1488Q"^Immediately return this expression instead of assigning it to the temporary variable "detail".( µŸïùÿÿÿÿ
+w
+java:S1488b"\Immediately return this expression instead of assigning it to the temporary variable "size".(Ÿü½úÿÿÿÿ
+Y
+java:S1128"CRemove this unused import 'com.smart.brd.manage.base.entity.TDrug'.(‡î’×
+p
+java:S1128"URemove this unused import 'org.springframework.transaction.annotation.Transactional'.(ğùçøùÿÿÿÿ

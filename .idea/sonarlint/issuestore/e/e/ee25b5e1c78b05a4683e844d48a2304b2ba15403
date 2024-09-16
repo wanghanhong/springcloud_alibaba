@@ -1,0 +1,10 @@
+
+>
+java:S1643`"Use a StringBuilder instead.(¦í°—øÿÿÿÿ8ìıÙ”/
+V
+java:S4719V"9Replace charset name argument with StandardCharsets.UTF_8(»ƒ ¿8ìıÙ”/
+V
+java:S4719]"9Replace charset name argument with StandardCharsets.UTF_8(ëùáŸ8ìıÙ”/
+L
+java:S2093N"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ8ìıÙ”/
+]	java:S125 "<This block of commented-out lines of code should be removed.(»•ûÿÿÿÿ8ìıÙ”/

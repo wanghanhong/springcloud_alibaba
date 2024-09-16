@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="api-common-auth" />
+        <module name="api-common-core" />
+        <module name="api-common-log" />
+        <module name="api-common-redis" />
+        <module name="api-common-swagger" />
+        <module name="api-gateway" />
+        <module name="api-system-auth" />
+        <module name="api-system-common" />
+        <module name="api-system-manage" />
+        <module name="api-transaction" />
+        <module name="brd-manage-base" />
+        <module name="brd-sys" />
+        <module name="card-manage" />
+        <module name="card-sys" />
+        <module name="device-access" />
+        <module name="device-common-module" />
+        <module name="device-install" />
+        <module name="device-message" />
+        <module name="message-manage" />
+        <module name="publicize-manage" />
+        <module name="smart-fire-platform" />
+        <module name="smoke-fire-platform" />
+        <module name="test-demo" />
+        <module name="video-manage" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="api-common" target="1.8" />
+      <module name="api-common-auth" target="1.8" />
+      <module name="api-common-core" target="1.8" />
+      <module name="api-common-log" target="1.8" />
+      <module name="api-common-redis" target="1.8" />
+      <module name="api-common-swagger" target="1.8" />
+      <module name="api-gateway" target="1.8" />
+      <module name="api-system" target="1.8" />
+      <module name="api-system-auth" target="1.8" />
+      <module name="api-system-common" target="1.8" />
+      <module name="api-system-manage" target="1.8" />
+      <module name="api-transaction" target="1.8" />
+      <module name="brd-manage-base" target="1.8" />
+      <module name="brd-sys" target="1.8" />
+      <module name="card-manage" target="1.8" />
+      <module name="card-sys" target="1.8" />
+      <module name="device-access" target="1.8" />
+      <module name="device-common-module" target="1.8" />
+      <module name="device-install" target="1.8" />
+      <module name="device-manage" target="1.8" />
+      <module name="device-message" target="1.8" />
+      <module name="message-manage" target="1.8" />
+      <module name="publicize-manage" target="1.8" />
+      <module name="smart-fire-platform" target="1.8" />
+      <module name="smoke-fire-platform" target="1.8" />
+      <module name="springcloud-alibaba" target="1.8" />
+      <module name="test-demo" target="1.8" />
+      <module name="video-manage" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

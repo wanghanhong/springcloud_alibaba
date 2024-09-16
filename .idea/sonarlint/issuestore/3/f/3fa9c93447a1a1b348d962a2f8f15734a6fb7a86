@@ -1,0 +1,22 @@
+
+~
+java:S1488Z"cImmediately return this expression instead of assigning it to the temporary variable "companyInfo".(µœ™³ûÿÿÿÿ
+j
+java:S1128"ORemove this unused import 'com.smart.brd.sys.system.usertoken.entity.UserBean'.(êş›âÿÿÿÿÿ
+F
+java:S1128"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ
+d
+java:S1128	"IRemove this unused import 'com.smart.brd.sys.common.domain.QueryRequest'.(èæ‹Ôûÿÿÿÿ
+_
+java:S1128"DRemove this unused import 'com.smart.brd.sys.system.domain.po.Dept'.(ğğ½¢ûÿÿÿÿ
+F
+java:S1128 "+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ
+b
+java:S32523"LUse static access with "org.apache.commons.lang3.StringUtils" for "isBlank".(™øœå
+e
+java:S32526"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(¶óà
+U
+java:S1854g":Remove this useless assignment to local variable "userId".(½ÊşÏúÿÿÿÿ
+N	java:S106v"9Replace this use of System.out or System.err by a logger.(ÈÅ×Ù
+F
+java:S1481g"+Remove this unused "userId" local variable.(½ÊşÏúÿÿÿÿ

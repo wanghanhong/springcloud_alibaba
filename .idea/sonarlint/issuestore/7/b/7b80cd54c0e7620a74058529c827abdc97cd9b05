@@ -1,0 +1,35 @@
+
+p
+java:S3252û"RUse static access with "org.springframework.beans.BeanUtils" for "copyProperties".(‰Â ’8Œ”ü®”/
+p
+java:S3252ý"RUse static access with "org.springframework.beans.BeanUtils" for "copyProperties".(˜¬¤þ8Œ”ü®”/
+[
+java:S1155T">Use isEmpty() to check whether the collection is empty or not.(Öãáù8çô¯Õ•/
+n
+java:S3252‡"RUse static access with "org.springframework.beans.BeanUtils" for "copyProperties".(Õ‹³ñûÿÿÿÿ
+u
+java:S3252è"RUse static access with "org.springframework.beans.BeanUtils" for "copyProperties".(Õ‹³ñûÿÿÿÿ8Œ”ü®”/
+\
+java:S1155Î">Use isEmpty() to check whether the collection is empty or not.(…õ©8çô¯Õ•/
+M
+java:S3740ƒ"/Provide the parametrized type for this generic.(®’Ë¼8Œ”ü®”/
+M
+java:S3740“"/Provide the parametrized type for this generic.(àÙÁâ8Œ”ü®”/
+?
+java:S1643"Use a StringBuilder instead.(ÁôÞŽøÿÿÿÿ8çô¯Õ•/
+u
+java:S3252Û"RUse static access with "org.springframework.beans.BeanUtils" for "copyProperties".(Õ‹³ñûÿÿÿÿ8Œ”ü®”/
+[
+java:S1155\">Use isEmpty() to check whether the collection is empty or not.(·†Ÿè8çô¯Õ•/
+a
+java:S1155Õ">Use isEmpty() to check whether the collection is empty or not.(ôÅÔ÷üÿÿÿÿ8çô¯Õ•/
+u
+java:S3776·"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(¬¹òšþÿÿÿÿ8Œ”ü®”/
+R
+java:S3740›"/Provide the parametrized type for this generic.(Ù’ÒÖûÿÿÿÿ8Œ”ü®”/
+p
+java:S3252º"RUse static access with "org.springframework.beans.BeanUtils" for "copyProperties".(»Ç”–8Œ”ü®”/
+h
+java:S3252|"RUse static access with "org.springframework.beans.BeanUtils" for "copyProperties".(»Ç”–
+a
+java:S1155Ÿ">Use isEmpty() to check whether the collection is empty or not.(É€°Îøÿÿÿÿ8çô¯Õ•/

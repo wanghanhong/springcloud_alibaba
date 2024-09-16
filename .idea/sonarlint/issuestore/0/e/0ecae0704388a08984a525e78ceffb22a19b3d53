@@ -1,0 +1,16 @@
+
+_
+java:S1128"JRemove this unused import 'com.smart.brd.manage.base.entity.THeartDevice'.(âáÉ
+O
+java:S1128"4Remove this unused import 'java.time.LocalDateTime'.(æÃ§ƒüÿÿÿÿ
+j
+java:S3252M"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(Êš‹†úÿÿÿÿ
+j
+java:S32526"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(Êš‹†úÿÿÿÿ
+C	java:S108M")Either remove or fill this block of code.(Êš‹†úÿÿÿÿ
+Q	java:S125?"<This block of commented-out lines of code should be removed.(ý­ó×
+E
+java:S3740!"/Provide the parametrized type for this generic.(‚Ê«
+C	java:S1086")Either remove or fill this block of code.(Êš‹†úÿÿÿÿ
+g
+java:S1128"LRemove this unused import 'com.smart.brd.manage.base.common.dict.DictCache'.(Áè”õùÿÿÿÿ

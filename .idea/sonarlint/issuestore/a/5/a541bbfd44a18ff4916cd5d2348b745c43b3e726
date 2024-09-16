@@ -1,0 +1,40 @@
+
+K
+java:S2589"7Remove this expression which always evaluates to "true"(ïÉ¨¶
+x
+java:S1149"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ì­ŠÜúÿÿÿÿ
+p
+java:S1488"\Immediately return this expression instead of assigning it to the temporary variable "list".(ÔØ·î
+O	java:S125"<This block of commented-out lines of code should be removed.(Š¢ŠÎ
+h
+java:S3252"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(£•¸¾ÿÿÿÿÿ
+c
+java:S3252"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(ñÅÜ“
+a
+java:S1192"MDefine a constant instead of duplicating this literal "dict_type_id" 3 times.(ó³´”
+h
+java:S3252"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(£•¸¾ÿÿÿÿÿ
+5
+java:S1116"Remove this empty statement.(ã…Ó¦ûÿÿÿÿ
+a
+java:S1128"FRemove this unused import 'com.smart.brd.manage.base.entity.TVaccine'.(¨Ùñøÿÿÿÿ
+c
+java:S3252"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(“Ù÷¥
+h
+java:S3252"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(±÷¹ðúÿÿÿÿ
+w
+java:S1488"^Immediately return this expression instead of assigning it to the temporary variable "string".(•––’øÿÿÿÿ
+h
+java:S3252"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(Øý³Žÿÿÿÿÿ
+u
+java:S1149Á"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(î¯Â
+h
+java:S3252"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(Ú©ã‚ýÿÿÿÿ
+`
+java:S1192"LDefine a constant instead of duplicating this literal "dict_type_0" 3 times.(ó³´”
+<
+java:S1643"Use a StringBuilder instead.(ÁôÞŽøÿÿÿÿ8ìº×¥”/
+Y
+java:S1155">Use isEmpty() to check whether the collection is empty or not.(”Ä¯Ñ8ìº×¥”/
+Y
+java:S1155">Use isEmpty() to check whether the collection is empty or not.(”Ä¯Ñ8ìº×¥”/

@@ -1,0 +1,13 @@
+
+X	java:S125>"<This block of commented-out lines of code should be removed.(¤Ú†²8ž‰²¬•/
+>
+java:S1643n"Use a StringBuilder instead.(¦í°—øÿÿÿÿ8ž‰²¬•/
+^	java:S125‚"<This block of commented-out lines of code should be removed.(»ž•ûÿÿÿÿ8ž‰²¬•/
+L
+java:S2093\"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ8ž‰²¬•/
+V
+java:S4719k"9Replace charset name argument with StandardCharsets.UTF_8(ëùáŸ8ž‰²¬•/
+V
+java:S4719d"9Replace charset name argument with StandardCharsets.UTF_8(»ƒ ¿8ž‰²¬•/
+„
+java:S1488,"bImmediately return this expression instead of assigning it to the temporary variable "encryption".(Ãµ¶Óúÿÿÿÿ8ž‰²¬•/

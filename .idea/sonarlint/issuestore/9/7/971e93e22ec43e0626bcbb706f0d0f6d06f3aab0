@@ -1,0 +1,7 @@
+
+u
+java:S1149Ì"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(î¯Â
+{
+java:S1149Æ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ì­ŠÜúÿÿÿÿ
+z
+java:S1488É"^Immediately return this expression instead of assigning it to the temporary variable "string".(•––’øÿÿÿÿ
