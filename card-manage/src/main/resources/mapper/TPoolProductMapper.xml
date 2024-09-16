@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.card.manage.mapper.TPoolProductMapper">
+
+
+    <select id="tPoolProductList" parameterType="com.smart.card.manage.entity.TPoolProduct" resultType="com.smart.card.manage.entity.TPoolProduct">
+        SELECT * from t_pool_product t where t.delete_flag = 0
+        <if test="vo.poolNbr != null ">
+            and t.pool_nbr = #{vo.poolNbr}
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+    </select>
+
+
+</mapper>

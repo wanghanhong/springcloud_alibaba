@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TDiseaseTreatMapper">
+
+    <select id="tDiseaseTreatList" parameterType="com.smart.brd.manage.base.entity.TDiseaseTreat"
+            resultType="com.smart.brd.manage.base.entity.TDiseaseTreat">
+        SELECT
+        t1.*,
+        t.device_code,
+        t.shed_name,
+        t.bed_name,
+        t.suitable
+        FROM
+        t_disease_treat t1
+        LEFT JOIN t_livestock t ON t1.livestock_id = t.livestock_id
+        LEFT JOIN (
+        SELECT CONVERT
+        (
+        SUM( treatment_costs ),
+        DECIMAL ( 10, 2 )) AS treatmentCostsSum,
+        r.disease_treat_id
+        FROM
+        t_disease_record r
+        GROUP BY
+        r.disease_treat_id
+        ) aa ON aa.disease_treat_id = t1.id
+        where t1.delete_flag=0
+--         and t.delete_flag=0
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        <!--注释价格相关-->
+       <!-- <if test="vo.minTreatmentCostsSum != null and vo.minTreatmentCostsSum != '' ">
+            and aa.treatmentCostsSum &gt;= #{vo.minTreatmentCostsSum}
+        </if>
+        <if test="vo.maxTreatmentCostsSum != null and vo.maxTreatmentCostsSum != '' ">
+            and aa.treatmentCostsSum &lt;= #{vo.maxTreatmentCostsSum}
+       </if>
+        <if test="vo.treatmentCostsSum != null and vo.treatmentCostsSum != '' ">
+            and aa.treatmentCostsSum  = #{vo.treatmentCostsSum}
+        </if>
+        -->
+        <if test="vo.diseaseId != null and vo.diseaseId != '' ">
+            and t1.disease_id=#{vo.diseaseId}
+        </if>
+        <if test="vo.diseaseName != null and vo.diseaseName != '' ">
+            and t1.disease_name=#{vo.diseaseName}
+        </if>
+        <if test="vo.treatmentState != null and vo.treatmentState != '' ">
+            and t1.treatment_state=#{vo.treatmentState}
+        </if>
+        <if test="vo.shedId != null and vo.shedId != '' ">
+            and t.shed_id=#{vo.shedId}
+        </if>
+        <if test="vo.bedId != null and vo.bedId != '' ">
+            and t.bed_id=#{vo.bedId}
+        </if>
+        <if test="vo.suitable != null and vo.suitable != '' ">
+            and t.suitable=#{vo.suitable}
+        </if>
+        <if test="vo.startTime != null and vo.startTime != '' ">
+            and t1.treat_date &gt;= #{vo.startTime}
+        </if>
+        <if test="vo.endTime != null and vo.endTime != '' ">
+            and t1.treat_date &lt;= #{vo.endTime}
+        </if>
+        ORDER BY t1.treatment_state,t1.create_time desc
+    </select>
+
+
+</mapper>

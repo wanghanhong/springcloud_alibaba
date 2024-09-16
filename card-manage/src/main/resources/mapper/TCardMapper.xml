@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.card.manage.mapper.TCardMapper">
+
+
+    <select id="tCardList" parameterType="com.smart.card.manage.entity.TCard" resultType="com.smart.card.manage.entity.vo.TCardVo">
+        SELECT * from t_card t where t.delete_flag = 0
+        <if test="vo.iccid != null ">
+            and (t.iccid like concat('%',#{vo.iccid},'%')
+                or t.msisdn like concat('%',#{vo.iccid},'%')
+                or  t.imsi4g like concat('%',#{vo.iccid},'%')
+                or  t.imsi3g like concat('%',#{vo.iccid},'%') )
+        </if>
+        <if test="vo.simStatusName != null  ">
+            and t.sim_status in (${vo.simStatusName})
+        </if>
+        <if test="vo.groupId != null  ">
+            and t.group_id = #{vo.groupId}
+        </if>
+        <if test="vo.tags != null and vo.tags != '' ">
+            and t.tags like concat('%',#{vo.tags},'%')
+        </if>
+        <if test="vo.isPoolMember != null and vo.isPoolMember != '' ">
+            and t.is_pool_member = #{vo.isPoolMember}
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+
+    </select>
+    <select id="getCardByAcc" resultType="com.smart.card.manage.entity.TCard">
+        select * from t_card t where t.delete_flag = 0
+        and t.msisdn = #{msisdn}
+    </select>
+    <select id="getIccidByAcc" resultType="java.lang.Long">
+        select iccid from t_card t where t.delete_flag = 0
+        and t.msisdn = #{msisdn}
+    </select>
+
+
+</mapper>

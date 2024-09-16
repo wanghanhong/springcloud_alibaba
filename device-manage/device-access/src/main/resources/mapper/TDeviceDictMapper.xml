@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.access.mapper.TDeviceDictMapper">
+
+    <select id="queryDeviceTypeALL" resultType="com.smart.device.common.access.entity.TDeviceDict" parameterType="java.lang.Integer">
+        select * from t_device_dict where status = 2
+    </select>
+    <select id="queryDeviceTypeList" resultType="com.smart.device.common.access.entity.TDeviceDict" parameterType="java.lang.Integer">
+        select * from t_device_dict where status = 2 and delete_flag = 0
+    </select>
+    <select id="queryDeviceParentTypeList" resultType="com.smart.device.common.access.entity.TDeviceDict" >
+        select * from t_device_dict where status = 1 and delete_flag = 0
+    </select>
+
+    <select id="getDictByType" resultType="com.smart.device.common.access.entity.TDeviceDict" parameterType="java.lang.String">
+        select * from t_device_dict where status = 2
+        <if test="deviceType != null and deviceType != '' ">
+            and device_type = #{deviceType}
+        </if>
+    </select>
+
+
+
+
+
+
+
+
+
+    <select id="getModelType" resultType="java.lang.String" parameterType="java.lang.String">
+        select device_type from t_device_dict where status = 1
+        <if test="deviceModel != null and deviceModel != '' ">
+           and device_model = #{deviceModel}
+        </if>
+        limit 1
+    </select>
+
+    <select id="getProjectId" resultType="com.smart.device.common.access.entity.TDeviceDict">
+        select * from t_device_dict where status = 1 and device_type = #{type}
+    </select>
+
+    <select id="getDictLimit" resultType="com.smart.device.common.access.entity.TDeviceDict" parameterType="java.lang.String">
+        select device_type deviceType,device_type_name deviceTypeName from t_device_dict where status = 2 and delete_flag = 0
+        <if test="deviceModel != null and deviceModel != '' ">
+            and device_model = #{deviceModel}
+        </if>
+        <if test="deviceType != null and deviceType != '' ">
+            and parent_type = #{deviceType}
+        </if>
+    </select>
+
+    <select id="getDictBydeviceType" resultType="com.smart.device.common.access.entity.TDeviceDict" parameterType="java.lang.Integer">
+        select * from t_device_dict where status = 2 and delete_flag = 0 and device_type = #{deviceType}
+     </select>
+
+
+
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.card.manage.mapper.TPoolMemberMapper">
+
+
+    <select id="tPoolMemberList" parameterType="com.smart.card.manage.entity.TPoolMember" resultType="com.smart.card.manage.entity.TPoolMember">
+        SELECT * from t_pool_member t where t.delete_flag = 0
+        <if test="vo.subsId != null and vo.subsId != '' ">
+            and t.subs_id like concat('%',#{vo.subsId},'%')
+        </if>
+        <if test="vo.poolNbr != null ">
+            and t.pool_nbr = #{vo.poolNbr}
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+    </select>
+    <select id="getMemberByAcc" resultType="com.smart.card.manage.entity.TPoolMember">
+        SELECT * from t_pool_member t where t.delete_flag = 0
+        and t.subs_id = #{subs}
+    </select>
+
+</mapper>

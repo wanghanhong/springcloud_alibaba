@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.access.mapper.TDeviceElectricMapper">
+
+    <select id="findElectricDevice" resultType="java.lang.Long">
+        SELECT imei from t_device_electric
+    </select>
+
+    <select id="findElectricIds" resultType="java.lang.Long">
+        SELECT id from t_device_electric
+    </select>
+
+
+    <update id="updateDBElectric">
+        update t_device_electric
+        <set>
+            <if test="vo.alarmTemperature != null ">
+                alarm_temperature = #{vo.alarmTemperature},
+            </if>
+            <if test="vo.alarmElectric != null ">
+                alarm_electric = #{vo.alarmElectric},
+            </if>
+            <if test="vo.alarmElectricLeakage != null ">
+                alarm_electric_leakage = #{vo.alarmElectricLeakage}
+            </if>
+        </set>
+        where imei = #{vo.imei}
+    </update>
+
+    <select id="selectDeviceElectric" parameterType="com.smart.device.common.access.entity.vo.DeviceBaseVo" resultType="com.smart.device.common.access.entity.vo.DeviceBaseVo">
+        select * from t_device_electric t where t.delete_flag = 0
+        <if test="vo.id != null ">
+            and t.id = #{vo.id}
+        </if>
+        <if test="vo.imei != null ">
+            and t.imei = #{vo.imei}
+        </if>
+        order by t.create_time desc limit 1
+    </select>
+
+    <select id="selectElectricAllHigh" parameterType="com.smart.device.common.access.entity.vo.DeviceBaseVo" resultType="com.smart.device.common.access.entity.vo.DeviceBaseVo">
+        select t.id deviceId,t.device_type from t_device_electric t,t_device_dict t1 where t.device_type = t1.device_type and t1.`status` = 2 and t1.heart_interval  &lt; 10 ;
+    </select>
+    <select id="selectElectricAllLow" parameterType="com.smart.device.common.access.entity.vo.DeviceBaseVo" resultType="com.smart.device.common.access.entity.vo.DeviceBaseVo">
+        select t.id deviceId,t.device_type from t_device_electric t,t_device_dict t1 where t.device_type = t1.device_type and t1.`status` = 2 and t1.heart_interval  &gt; 10 ;
+    </select>
+
+</mapper>

@@ -1,0 +1,106 @@
+server:
+  port: 11001
+  tomcat:
+    accept-count: 500
+    uri-encoding: UTF-8
+    min-spare-threads: 50
+    max-threads: 800
+    max-connections: 10000
+info:
+  nacos:
+    address: 172.22.1.21:8500
+spring:
+  application:
+    name: brd-sys
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${info.nacos.address}
+      config:
+        server-addr: ${info.nacos.address}
+        file-extension: yaml
+  datasource:
+    dynamic:
+      p6spy: true
+      hikari:
+        connection-timeout: 30000
+        max-lifetime: 1800000
+        max-pool-size: 100
+        min-idle: 5
+        connection-test-query: select 1
+        pool-name: FebsHikariCP
+      # 配置默认数据源
+      primary: primary
+      datasource:
+        # 数据源-1，名称为 primary
+        primary:
+          username: root
+          password: Developer@2019
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://172.22.1.21:3306/brd_sys?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+        # 数据源-2，名称为 test  47.92.145.171
+  #        test:
+  #          username: root
+  #          password: 123456
+  #          driver-class-name: com.mysql.cj.jdbc.Driver
+  #          url: jdbc:mysql://127.0.0.1:3306/febs_test?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+  aop:
+    proxy-target-class: true
+  devtools:
+    restart:
+      exclude:  static/**,public/**
+      enabled:  true
+  messages:
+    encoding: utf-8
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  redis:
+    database: 0
+    host: 172.22.1.21
+    port: 6379
+    password: wlw@redis
+    jedis:
+      pool:
+        min-idle: 8
+        max-idle: 500
+        max-active: 2000
+        max-wait: 60000
+    timeout: 1800
+#mybatis plus 设置
+mybatis-plus:
+  type-aliases-package: wlw.smart.fire.system.domain,wlw.smart.fire.job.domain,wlw.smart.fire.platform.v1.entity
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    jdbc-type-for-null: null
+  global-config:
+    # 关闭 mybatis-plus的 banner
+    banner: false
+    db-config:
+      id-type: id_worker
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ['httptrace', 'metrics']
+
+# 项目自有配置
+febs:
+  # 是否异步记录用户操作日志
+  openAopLog: true
+  # 单次最大批量入库数量
+  max:
+    batch:
+      insert:
+        num: 1000
+  shiro:
+    # 后端免认证接口 url
+    anonUrl: /login,/logout/**,/regist,/register,/user/check/**,/api/**,/connect/token,/sd/filessss/**,/ws/**
+    # token有效期，单位秒
+    jwtTimeOut: 36000
+###################################################
+xcxappKey: wxa4e755139162e08c
+xcxappSecret: 0c35b65bf2c15bb382e1245b571765ed

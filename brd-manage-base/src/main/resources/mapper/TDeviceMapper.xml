@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TDeviceMapper">
+
+
+    <select id="tDeviceList" parameterType="com.smart.brd.manage.base.entity.TDevice" resultType="com.smart.brd.manage.base.entity.TDevice">
+        SELECT * from t_device t where t.delete_flag = 0
+        <if test="vo.deviceType != null ">
+            and t.device_type = #{vo.deviceType}
+        </if>
+        <if test="vo.deviceName != null ">
+            and t.device_name like concat('%',#{vo.deviceName},'%')
+        </if>
+        <if test="vo.deviceCode != null ">
+            and t.device_code like concat('%',#{vo.deviceCode},'%')
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+
+
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.sys.system.dao.DeptMapperEx">
+
+    <select id="findDeptPage" parameterType="com.smart.brd.sys.system.domain.po.DeptEx" resultType="com.smart.brd.sys.system.domain.po.DeptEx">
+        SELECT t.* from t_dept t
+        <where>
+            <if test="vo.deptIds != null and vo.deptIds != '' ">
+                and t.dept_id in (${vo.deptIds})
+            </if>
+        </where>
+    </select>
+
+    <select id="getDeptIdByDeptName" parameterType="string" resultType="com.smart.brd.sys.system.domain.po.DeptEx">
+        SELECT * from t_dept t where t.DEPT_NAME = #{0}
+    </select>
+    <select id="deptNameQuery"  resultType="java.lang.Long">
+        SELECT Count(0) from t_dept t where t.parent_id = #{parentId} and t.DEPT_NAME = #{deptName}
+    </select>
+
+    <select id="selectBrdField"  parameterType="com.smart.brd.sys.system.domain.po.DeptEx" resultType="java.lang.Long" >
+        SELECT field_id deptId from brd_manage_base.t_brd_field t
+        where (field_name = #{vo.deptName} or field_id = #{vo.deptId} )
+    </select>
+    <insert id="insertBrdField" parameterType="com.smart.brd.sys.system.domain.po.DeptEx" >
+        insert into brd_manage_base.t_brd_field(field_id,field_name,field_number)
+        values (#{vo.deptId},#{vo.deptName},#{vo.deptCode})
+    </insert>
+
+    <update id="updateBrdField" parameterType="com.smart.brd.sys.system.domain.po.DeptEx">
+        update brd_manage_base.t_brd_field
+        <set>
+            <if test="vo.deptName != null ">
+                field_name = #{vo.deptName},
+            </if>
+            <if test="vo.deptCode != null ">
+                field_number = #{vo.deptCode},
+            </if>
+        </set>
+        where field_id = #{vo.deptId}
+    </update>
+
+    <update id="deleteBrdField" parameterType="java.lang.Long">
+        update brd_manage_base.t_brd_field set delete_flag = 1 where field_id = #{deptId} ;
+    </update>
+
+    <select id="queryDeptSons" parameterType="com.smart.brd.sys.system.domain.po.DeptEx" resultType="com.smart.brd.sys.system.domain.po.DeptEx">
+        SELECT t.* from t_dept t where t.dept_id > 0
+        <if test="vo.deptId != null ">
+            and t.parent_id = #{vo.deptId}
+        </if>
+    </select>
+
+</mapper>

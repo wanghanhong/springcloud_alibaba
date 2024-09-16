@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.install.mapper.TBaseBuildingSonMapper">
+
+    <select id="selectBaseBuildingSon" resultType="com.smart.device.common.install.entity.TBaseBuildingSon" >
+        select * from t_base_building_son t
+        where t.building_id = #{buildingId}
+        and t.floor_num = #{floorNum}
+    </select>
+
+
+</mapper>

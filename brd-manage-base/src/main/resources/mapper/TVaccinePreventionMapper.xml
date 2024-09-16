@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TVaccinePreventionMapper">
+
+
+    <select id="tVaccinePreventionList" parameterType="com.smart.brd.manage.base.entity.TVaccinePrevention" resultType="com.smart.brd.manage.base.entity.TVaccinePrevention">
+        SELECT * from t_vaccine_prevention t
+        LEFT JOIN t_vaccine t1 on t.vaccine_id=t1.vaccine_id
+        where t.delete_flag = 0
+        <if test="vo.year != null and vo.year != '' ">
+            and t.year = #{vo.year}
+        </if>
+        <if test="vo.suitable != null and vo.suitable != '' ">
+            and t.suitable like concat('%',#{vo.suitable},'%')
+        </if>
+        <if test="vo.preventionObj != null and vo.preventionObj != '' ">
+            and t.prevention_obj = #{vo.preventionObj}
+        </if>
+        <if test="vo.vaccineName != null and vo.vaccineName != '' ">
+            and t1.vaccine_name like concat('%',#{vo.vaccineName},'%')
+        </if>
+        <!--<if test="vo.unitPrice != null and vo.unitPrice != '' ">-->
+            <!--and t1.unit_price = #{vo.unitPrice}-->
+        <!--</if>-->
+        <if test="vo.dosage != null and vo.dosage != '' ">
+            and t.dosage = #{vo.dosage}
+        </if>
+        <!--<if test="vo.cost != null and vo.cost != '' ">-->
+            <!--and t.cost = #{vo.cost}-->
+        <!--</if>-->
+        <if test="vo.supplierName != null and vo.supplierName != '' ">
+            and t1.supplier_name = #{vo.supplierName}
+        </if>
+        <if test="vo.startTime != null and vo.startTime != '' ">
+            and t.treat_time &gt;= #{vo.startTime}
+        </if>
+        <if test="vo.endTime != null and vo.endTime != '' ">
+            and t.treat_time &lt;= #{vo.endTime}
+        </if>
+        <!--<if test="vo.priceMin != null and vo.priceMin != '' ">-->
+            <!--and t1.unit_price &gt;= #{vo.priceMin}-->
+        <!--</if>-->
+        <!--<if test="vo.priceMax != null and vo.priceMax != '' ">-->
+            <!--and t1.unit_price &lt;= #{vo.priceMax}-->
+        <!--</if>-->
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        <if test="vo.manufacturer != null and vo.manufacturer != '' ">
+            and t1.manufacturer like concat('%',#{vo.manufacturer},'%')
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+
+
+</mapper>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.install.mapper.TManagerWaterpressMapper">
+
+    <select id="managerWaterpressList" parameterType="com.smart.device.common.install.entity.TManagerWaterpress" resultType="com.smart.device.common.install.entity.TManagerWaterpress">
+        SELECT * from t_manager_waterpress t where t.delete_flag = 0
+        <if test="vo.imei != null ">
+            and t.imei = #{vo.imei}
+        </if>
+        <if test="vo.companyName != null and vo.companyName != ''">
+            and t.company_name like concat('%',#{vo.companyName},'%')
+        </if>
+        <if test="vo.deviceState != null  ">
+            and t.device_state = #{vo.deviceState}
+        </if>
+        <if test="vo.companyId != null  ">
+            and t.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.buildingId != null  ">
+            and t.building_id = #{vo.buildingId}
+        </if>
+        <if test="vo.buildingFloor != null  ">
+            and t.building_floor = #{vo.buildingFloor}
+        </if>
+        <if test="vo.opUserId != null ">
+            and t.op_user_id = #{vo.opUserId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and t.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and t.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and t.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and t.town = #{vo.town}
+        </if>
+        order by t.create_time desc
+    </select>
+
+    <select id="getManagerWaterpress" parameterType="com.smart.device.common.install.entity.TManagerWaterpress" resultType="com.smart.device.common.install.entity.TManagerWaterpress">
+        SELECT * from t_manager_waterpress t where t.delete_flag = 0
+        and t.imei = #{vo.imei} limit 1
+    </select>
+
+    <select id="selectWaterpress" parameterType="com.smart.device.common.install.entity.TManagerWaterpress" resultType="com.smart.device.common.install.entity.TManagerWaterpress">
+        select * from db_device_basic.t_device_waterpress t where t.delete_flag = 0
+        <if test="vo.id != null ">
+            and t.id = #{vo.id}
+        </if>
+        <if test="vo.deviceCode != null and vo.deviceCode != '' ">
+            and t.device_code = #{vo.deviceCode}
+        </if>
+        <if test="vo.imei != null ">
+            and t.imei = #{vo.imei}
+        </if>
+        order by t.create_time desc
+    </select>
+
+    <select id="wterpressNoPage" parameterType="com.smart.device.install.entity.vo.DeviceVo" resultType="com.smart.device.install.entity.vo.DeviceVo">
+        SELECT * from t_manager_waterpress t where t.delete_flag = 0
+        <if test="vo.companyId != null  ">
+            and t.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.buildingId != null  ">
+            and t.building_id = #{vo.buildingId}
+        </if>
+        <if test="vo.buildingFloor != null  ">
+            and t.building_floor = #{vo.buildingFloor}
+        </if>
+        order by t.create_time desc
+    </select>
+
+    <select id="waterpressPerSonByDeviceId" parameterType="java.lang.Long" resultType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+         select t1.device_id,t1.device_type,t1.parent_type,t.id company_id,t.company_name,t.incharge_name,t.incharge_phone
+        ,t.manager_name,t.manager_phone,t.parttime_name,t.parttime_phone,
+				t1.building_name,t1.building_floor,t1.device_code,t1.imei
+				,t.province,t.city,t.county,t.town,t1.location,t1.device_state_name
+        from t_base_company t,t_manager_waterpress t1
+        where t.id = t1.company_id and t1.device_id = #{deviceId};
+
+    </select>
+    <select id="waterpressUserByDeviceId" parameterType="java.lang.Long" resultType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+         select t.username,t.mobile phone,t.is_xcx,
+				t1.device_id,t1.building_name,t1.building_floor,t1.device_code,t1.imei
+				,t1.province,t1.city,t1.county,t1.town,t1.location,t1.housing,t1.device_state_name
+				from t_manager_waterpress t1,iot2.t_user t
+            where t1.op_user_id = t.user_id  and t1.device_id = #{deviceId} ;
+    </select>
+
+    <update id="updateWaterpressStatus" parameterType="com.smart.device.common.install.entity.TManagerWaterpress">
+        update t_manager_waterpress
+        <set>
+            <if test="vo.deviceState != null ">
+                device_state = #{vo.deviceState},
+            </if>
+            <if test="vo.deviceStateName != null ">
+                device_state_name = #{vo.deviceStateName},
+            </if>
+        </set>
+        where device_id = #{vo.deviceId}
+    </update>
+
+    <select id="getWaterpressNumByFloor" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select count(*) countNum from t_manager_waterpress t where
+        t.building_id = #{buildingId}
+        <if test="buildingFloor != null  ">
+            and t.building_floor = #{buildingFloor}
+        </if>
+    </select>
+
+</mapper>

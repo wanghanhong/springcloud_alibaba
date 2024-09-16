@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TBaseDictTypeMapper">
+
+
+    <select id="tBaseDictTypeList" parameterType="com.smart.brd.manage.base.entity.TBaseDictType" resultType="com.smart.brd.manage.base.entity.TBaseDictType">
+        SELECT t.*,
+        GROUP_CONCAT( DISTINCT t1.dict_name SEPARATOR ',' ) as dictShow
+        FROM t_base_dict_type t
+        LEFT JOIN t_base_dict t1 ON t.dict_type_id = t1.dict_type_id
+        where t.delete_flag = 0
+        <if test="vo.dictTypeName != null and vo.dictTypeName != '' ">
+            and t.dict_type_name  like concat('%',#{vo.dictTypeName},'%')
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.deptId in (${vo.deptIds})
+        </if>
+        GROUP BY t.id
+        ORDER BY t.create_time desc
+    </select>
+
+
+    <select id="findMax" parameterType="com.smart.brd.manage.base.entity.TBaseDictType" resultType="java.lang.Integer">
+        SELECT max(t.unique_id) from t_base_dict_type t where t.delete_flag = 0
+    </select>
+
+    <select id="selectByType" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(0) from  t_base_dict_type where dict_type_id = #{dictTypeId}
+    </select>
+</mapper>

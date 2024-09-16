@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.area.BsCityMapper">
+
+    <select id="queryCitysByCode" resultType="com.smart.brd.manage.base.entity.area.TBaseRegion" parameterType="java.lang.String">
+        select t.city_code regionCode,t.city_name regionName,t.level from bs_city t
+        <where>
+            <if test="code != null and code != ''">
+                t.province_code = #{code}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCityByCode" resultType="com.smart.brd.manage.base.entity.area.TBaseRegion" parameterType="java.lang.String">
+        select t.city_code regionCode,t.city_name regionName,t.level from bs_city t
+        where t.city_code = #{code}
+    </select>
+
+</mapper>

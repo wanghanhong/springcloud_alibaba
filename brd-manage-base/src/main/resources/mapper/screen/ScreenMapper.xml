@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.screen.mapper.ScreenMapper">
+
+
+    <select id="brdFieldGroupByCity" resultType="com.smart.brd.manage.base.screen.entity.ScreenEntity">
+       select t.city,count(*) countNum from  t_brd_field t where t.delete_flag = 0 GROUP BY t.city ORDER BY t.city
+    </select>
+    <select id="livestockGroupByCity" resultType="com.smart.brd.manage.base.screen.entity.ScreenEntity">
+       	select t1.city,count(*) countNum from  t_livestock t,t_brd_field t1 where t.field_id = t1.field_id and t.delete_flag = 0
+				GROUP BY t1.city
+    </select>
+    <select id="livestockGroupBySuitable" resultType="com.smart.brd.manage.base.screen.entity.ScreenEntity">
+        select t.suitable,count(*) countNum from  t_livestock t,t_brd_field t1 where t.field_id = t1.field_id and  t.delete_flag = 0 and   city in (610100,610200,610300,610400,610500,610600,610700,610800,610900,611000) GROUP BY t.suitable
+    </select>
+
+    <select id="livestockMonth" parameterType="com.smart.brd.manage.base.screen.entity.ScreenEntity" resultType="com.smart.brd.manage.base.screen.entity.ScreenEntity">
+        select DATE_FORMAT(t.add_time, '%Y-%m') month,count(1) countNum from t_livestock_shedentry t
+        where t.delete_flag = 0
+        <if test="vo.month != null and vo.month != '' ">
+            and t.add_time &gt;= #{vo.month}
+        </if>
+        group by DATE_FORMAT(t.add_time, '%Y-%m')
+    </select>
+
+    <select id="livestockOutMonth" parameterType="com.smart.brd.manage.base.screen.entity.ScreenEntity" resultType="com.smart.brd.manage.base.screen.entity.ScreenEntity">
+        select DATE_FORMAT(t.out_date, '%Y-%m') month,count(1) countNum from t_livestock_shedout t
+        where t.delete_flag = 0
+        <if test="vo.month != null and vo.month != '' ">
+            and t.out_date &gt;= #{vo.month}
+        </if>
+        group by DATE_FORMAT(t.out_date, '%Y-%m')
+    </select>
+
+    <select id="screenVaccineList" parameterType="com.smart.brd.manage.base.screen.entity.ScreenEntity" resultType="com.smart.brd.manage.base.screen.entity.ScreenVaccine">
+        select t2.city,t2.field_name,t1.create_time,t1.dict_name vaccineEvent from t_livestock t,t_livestock_dead t1,t_brd_field t2
+        where t.livestock_id = t1.livestock_id and t.field_id= t2.field_id
+        ORDER BY t1.create_time desc
+    </select>
+    <select id="sheOutGroupByCity" resultType="com.smart.brd.manage.base.screen.entity.ScreenEntity">
+        select t1.city,count(*) countNum from  t_livestock_shedout s,t_livestock_log t,t_brd_field t1
+        where s.livestock_id = t.livestock_id and t.field_id = t1.field_id and s.delete_flag = 0 and DATE_FORMAT( s.out_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+		GROUP BY t1.city
+    </select>
+
+
+</mapper>

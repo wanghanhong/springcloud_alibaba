@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TBrdBreederMapper">
+
+
+    <select id="tBrdBreederList" parameterType="com.smart.brd.manage.base.entity.TBrdBreeder" resultType="com.smart.brd.manage.base.entity.TBrdBreeder">
+        SELECT * from t_brd_breeder t
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.deptId in (${vo.deptIds})
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+
+
+</mapper>

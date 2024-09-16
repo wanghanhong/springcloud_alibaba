@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.install.mapper.TBaseProductMapper">
+
+    <select id="baseProductList" parameterType="com.smart.device.common.install.entity.TBaseProduct" resultType="com.smart.device.common.install.entity.TBaseProduct">
+        SELECT * from t_base_product t where t.delete_flag = 0
+        <if test="vo.id != null ">
+            and t.id = #{vo.id}
+        </if>
+        <if test="vo.productName != null and vo.productName != ''">
+            and t.product_name like concat('%',#{vo.productName},'%')
+        </if>
+        order by t.create_time desc
+    </select>
+
+</mapper>

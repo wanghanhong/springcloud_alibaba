@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.card.manage.mapper.TCardBillMapper">
+
+
+    <select id="tCardBillList" parameterType="com.smart.card.manage.entity.TCardBill" resultType="com.smart.card.manage.entity.TCardBill">
+        SELECT * from t_card_bill t where t.delete_flag = 0
+        <if test="vo.iccid != null ">
+            and t.iccid = #{vo.iccid}
+        </if>
+        <if test="vo.msisdn != null ">
+            and t.msisdn like concat('%',#{vo.msisdn},'%')
+        </if>
+        <if test="vo.queryFlag != null ">
+            and t.query_flag = #{vo.queryFlag}
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+    </select>
+    <select id="getBillByAcc" resultType="com.smart.card.manage.entity.TCardBill">
+        SELECT * from t_card_bill t where t.delete_flag = 0
+        and t.msisdn = #{msisdn} and t.cycle = #{cycle}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TBaseDictMapper">
+
+
+    <select id="tBaseDictList" parameterType="com.smart.brd.manage.base.entity.TBaseDict" resultType="com.smart.brd.manage.base.entity.TBaseDict">
+        SELECT * from t_base_dict t where t.delete_flag = 0
+        <if test="vo.dictTypeId != null and vo.dictTypeId != '' ">
+            and t.dict_type_id = #{vo.dictTypeId}
+        </if>
+        ORDER BY t.sortno asc
+    </select>
+    <select id="tBaseDictListNopage" parameterType="java.lang.String" resultType="com.smart.brd.manage.base.entity.dto.DictDto">
+        SELECT * from t_base_dict t where t.delete_flag = 0
+        <if test="dictTypeId != null and dictTypeId != '' ">
+            and t.dict_type_id = #{dictTypeId}
+        </if>
+        ORDER BY t.sortno asc
+    </select>
+    <select id="findAll" resultType="com.smart.brd.manage.base.entity.TBaseDict">
+        SELECT * from t_base_dict t where t.delete_flag = 0
+    </select>
+    <select id="findMax" parameterType="com.smart.brd.manage.base.entity.TBaseDict" resultType="java.lang.Integer">
+        SELECT max(t.dict_id) from t_base_dict t where t.delete_flag = 0
+    </select>
+    <select id="selectIdByName" resultType="java.lang.Integer">
+        SELECT dict_id FROM `t_base_dict` where dict_name = #{type} and (dict_type_id = 'dict_type_1' or dict_type_id = 'dict_type_117')
+    </select>
+    <select id="selectNameById" resultType="java.lang.String">
+        SELECT dict_name FROM `t_base_dict` where dict_id = #{dictId};
+    </select>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.card.manage.mapper.TCardProductDataMapper">
+
+
+    <select id="tCardProductDataList" parameterType="com.smart.card.manage.entity.vo.TCardVo" resultType="com.smart.card.manage.entity.vo.TCardProductDataDto">
+        SELECT t.tags,t.sim_status_name,t1.* from t_card_product_data t1, t_card t where t.delete_flag = 0
+        and t.iccid = t1.iccid
+        <if test="vo.iccid != null ">
+            and (t.iccid like concat('%',#{vo.iccid},'%')
+            or t.msisdn like concat('%',#{vo.iccid},'%')
+            or  t.imsi4g like concat('%',#{vo.iccid},'%')
+            or  t.imsi3g like concat('%',#{vo.iccid},'%') )
+        </if>
+        <if test="vo.simStatus != null  ">
+            and t.sim_status = #{vo.simStatus}
+        </if>
+        <if test="vo.groupId != null  ">
+            and t.group_id = #{vo.groupId}
+        </if>
+        <if test="vo.tags != null and vo.tags != '' ">
+            and t.tags = #{vo.tags}
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+    </select>
+
+
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.install.mapper.inspection.TBaseInsBuildMapper">
+
+    <select id="baseInsBuildList" parameterType="com.smart.device.common.install.entity.TBaseInsBuild" resultType="com.smart.device.common.install.entity.TBaseInsBuild">
+        SELECT * from t_base_inspection t where t.delete_flag = 0
+        <if test="vo.id != null ">
+            and t.id = #{vo.id}
+        </if>
+        <if test="vo.companyName != null and vo.companyName != ''">
+            and t.company_name like concat('%',#{vo.companyName},'%')
+        </if>
+        order by t.create_time desc
+    </select>
+
+    <resultMap id="myResultMap" type="com.smart.device.common.install.entity.TBaseInsBuild">
+        <id property="insBuildId" column="ins_build_id"/>
+        <id property="inspectionId" column="inspection_id"/>
+        <result property="buildingId" column="building_id"/>
+        <result property="buildingName" column="building_name"/>
+        <result property="buildPointNum" column="build_point_num"/>
+        <result property="companyId" column="company_id"/>
+        <collection property="insBuildFloors" column="ins_build_id"
+                    javaType="ArrayList" ofType="com.smart.device.common.install.entity.TBaseInsBuildFloor">
+            <id property="insBuildFloorId" column="ins_build_floor_id"/>
+            <result property="floorNum" column="floor_num"/>
+            <result property="escapeRouteNum" column="escape_route_num"/>
+            <result property="firehydrantNum" column="firehydrant_num"/>
+            <result property="fireAllNum" column="fire_all_num"/>
+            <result property="escapeRouteIs" column="escape_route_is"/>
+            <result property="firehydrantIs" column="firehydrant_is"/>
+            <result property="fireAllIs" column="fire_all_is"/>
+        </collection>
+    </resultMap>
+
+    <select id="insAndInsFloorByInsId" resultMap="myResultMap" parameterType="java.lang.Long">
+        SELECT t1.company_id,t1.company_name,t.inspection_id,
+        t.id ins_build_id,t.building_id,t.building_name,t1.point_num,
+        a.id ins_build_floor_id,a.floor_num,a.firehydrant_num,a.fire_all_num,
+        a.escape_route_num,a.escape_route_is,a.firehydrant_is,a.fire_all_is
+        from t_base_ins_build t,t_base_inspection t1,t_base_ins_build_floor a where t.inspection_id = t1.id and
+        t1.delete_flag = 0 and t.id =a.ins_build_id
+        <if test="inspectionId != null ">
+            and t1.id = #{inspectionId}
+        </if>
+    </select>
+
+    <select id="getBuildCountGroupByStatus" resultType="java.util.Map">
+       select * from (select count(*) count0 from t_base_ins_build t where t.build_point_num > 0 and t.inspection_id = #{inspectionId} ) t1,
+       (select count(*) count2 from t_base_ins_build t where t.build_point_num > 0 and t.inspection_id = #{inspectionId}   and t.status = 2) t2
+    </select>
+
+</mapper>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.screen.mapper.TLivestockAnalysisMapper">
+
+    <select id="deadNumBySuitable" resultType="com.smart.brd.manage.base.entity.vo.AnalysisVo" parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis">
+        select dict.dict_name,count(1) dict_num from
+        t_livestock_dead tld
+        left join t_livestock_log tl on tld.livestock_id =  tl.livestock_id
+        left join
+        (select tbd.dict_id,tbd.dict_name from  t_base_dict tbd left join t_base_dict_type tbdt on tbd.dict_type_id = tbdt.dict_type_id)dict on  tl.suitable = dict.dict_id
+        WHERE DATE_FORMAT( tld.dead_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) ,'%Y%m' ) and tld.delete_flag = 0
+        <if test="deptIds != null and deptIds != '' ">
+            and tld.dept_id in (${deptIds})
+        </if>
+        GROUP BY dict.dict_name;
+    </select>
+    <select id="deadNumByDeadInfo" resultType="com.smart.brd.manage.base.entity.vo.AnalysisVo"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis">
+        select tld.dict_name,count(1) dict_num from t_livestock_dead tld
+        WHERE DATE_FORMAT( tld.dead_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) ,'%Y%m' ) and tld.delete_flag = 0
+        <if test="deptIds != null and deptIds != '' ">
+            and tld.dept_id in (${deptIds})
+        </if>
+        GROUP BY tld.dict_name;
+    </select>
+    <select id="getOutTotal"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis" resultType="com.smart.brd.manage.base.entity.vo.AnalysisVo" >
+        select dict.dict_name as dictName ,count(1) as dictNum
+        from t_livestock_shedout t
+        left join t_livestock_log k on t.livestock_id =  k.livestock_id
+        left join
+        (select b.dict_id,b.dict_name from  t_base_dict b left join t_base_dict_type d on b.dict_type_id = d.dict_type_id)dict on k.suitable = dict.dict_id
+        where t.delete_flag = 0 and DATE_FORMAT( t.out_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+        <if test="deptIds != null and deptIds != '' ">
+            and t.dept_id in (${deptIds})
+        </if>
+        GROUP BY dict.dict_name
+    </select>
+    <select id="getOutNumAnalysis"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis" resultType="com.smart.brd.manage.base.entity.vo.ShedOutAnalysisVo">
+    SELECT v.month as outDate, ifnull(b.countPig, 0) as countPig
+    FROM (
+    SELECT DATE_FORMAT(CURDATE(), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 1 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 2 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 3 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 4 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 5 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 6 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 7 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 8 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 9 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 10 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 11 MONTH), '%Y-%m') AS `month`) v
+	LEFT JOIN
+    (
+	select IFNULL(count(1),0 ) as countPig ,DATE_FORMAT(out_date, '%Y-%m') as outDate
+        from t_livestock_shedout s
+        where s.delete_flag = 0
+        <if test="deptIds != null and deptIds != '' ">
+            and s.dept_id in (${deptIds})
+        </if>
+        group by DATE_FORMAT(out_date, '%Y-%m')
+        order by DATE_FORMAT(out_date, '%Y-%m') desc
+        limit 12
+    ) b ON v.month = b.outDate
+    ORDER BY outDate asc
+    </select>
+    <select id="getOutNumAnalysisByYear"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis" resultType="com.smart.brd.manage.base.entity.vo.ShedOutAnalysisYearVo">
+        SELECT a.click_date as outDate,ifnull(b.countPig, 0) AS countPig
+        FROM
+       (SELECT
+        YEAR (now()) AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 1 AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 2 AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 3 AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 4 AS click_date
+       ) a
+       left join
+        (select count(1) as countPig ,DATE_FORMAT(out_date, '%Y') as outDate
+        from t_livestock_shedout s
+        where s.delete_flag = 0
+        <if test="deptIds != null and deptIds != '' ">
+            and s.dept_id in (${deptIds})
+        </if>
+        group by DATE_FORMAT(out_date, '%Y')
+        order by DATE_FORMAT(out_date, '%Y') desc
+        LIMIT 5) b   ON a.click_date = b.outDate
+        ORDER BY outDate asc
+    </select>
+    <select id="deadNumByYear" resultType="com.smart.brd.manage.base.entity.vo.AnalysisVo"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis">
+         SELECT a.click_date as dict_name,ifnull(b.dict_num, 0) AS dict_num
+        FROM
+       (SELECT
+        YEAR (now()) AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 1 AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 2 AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 3 AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 4 AS click_date
+       ) a
+       left join
+        (select count(1) dict_num ,DATE_FORMAT(dead_date, '%Y') as dead_date
+        from t_livestock_dead tld
+        where tld.delete_flag = 0
+        <if test="deptIds != null and deptIds != '' ">
+            and tld.dept_id in (${deptIds})
+        </if>
+        group by DATE_FORMAT(dead_date, '%Y')
+        order by DATE_FORMAT(dead_date, '%Y') desc
+        LIMIT 5) b   ON a.click_date = b.dead_date
+        ORDER BY dict_name asc
+    </select>
+    <select id="deadNumByMonth" resultType="com.smart.brd.manage.base.entity.vo.AnalysisVo"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis">
+        SELECT v.month as dict_name, ifnull(b.dict_num, 0) as dict_num
+    FROM (
+    SELECT DATE_FORMAT(CURDATE(), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 1 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 2 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 3 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 4 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 5 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 6 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 7 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 8 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 9 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 10 MONTH), '%Y-%m') AS `month`
+    UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 11 MONTH), '%Y-%m') AS `month`) v
+	LEFT JOIN
+    (
+	select IFNULL(count(1),0 ) as dict_num ,DATE_FORMAT(dead_date, '%Y-%m') as dead_date
+        from t_livestock_dead d
+        where d.delete_flag = 0
+        <if test="deptIds != null and deptIds != '' ">
+            and d.dept_id in (${deptIds})
+        </if>
+        group by DATE_FORMAT(dead_date, '%Y-%m')
+        order by DATE_FORMAT(dead_date, '%Y-%m') desc
+        limit 12
+    ) b ON v.month = b.dead_date
+    ORDER BY dict_name asc
+    </select>
+    <select id="inNumBySuitable" resultType="com.smart.brd.manage.base.entity.vo.AnalysisVo"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis">
+        SELECT
+        tbd.dict_name,
+        ifnull(t1.dict_num,0) dict_num
+        FROM
+        t_base_dict tbd
+        LEFT JOIN ( SELECT t.suitable, count(*) dict_num FROM t_livestock t WHERE t.delete_flag = 0
+        <if test="deptIds != null and deptIds != '' ">
+            and t.dept_id in (${deptIds})
+        </if>
+        GROUP BY t.suitable ) t1 ON tbd.dict_id = t1.suitable
+        WHERE
+        tbd.dict_type_id = "dict_type_1"
+    </select>
+    <select id="inNumByMonth" resultType="com.smart.brd.manage.base.entity.vo.AnalysisVo"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis">
+            SELECT v.month as dict_name, ifnull(b.dict_num, 0) as dict_num
+        FROM (
+        SELECT DATE_FORMAT(CURDATE(), '%Y-%m') AS `month`
+        UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 1 MONTH), '%Y-%m') AS `month`
+        UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 2 MONTH), '%Y-%m') AS `month`
+        UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 3 MONTH), '%Y-%m') AS `month`
+        UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 4 MONTH), '%Y-%m') AS `month`
+        UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 5 MONTH), '%Y-%m') AS `month`
+        UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 6 MONTH), '%Y-%m') AS `month`
+        UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 7 MONTH), '%Y-%m') AS `month`
+        UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 8 MONTH), '%Y-%m') AS `month`
+        UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 9 MONTH), '%Y-%m') AS `month`
+        UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 10 MONTH), '%Y-%m') AS `month`
+        UNION SELECT DATE_FORMAT((CURDATE() - INTERVAL 11 MONTH), '%Y-%m') AS `month`) v
+        LEFT JOIN
+        (
+        select IFNULL(count(1),0 ) as dict_num ,DATE_FORMAT(add_time, '%Y-%m') as add_time
+            from t_livestock_shedentry s
+            where s.delete_flag = 0
+            <if test="deptIds != null and deptIds != '' ">
+                and s.dept_id in (${deptIds})
+            </if>
+            group by DATE_FORMAT(add_time, '%Y-%m')
+            order by DATE_FORMAT(add_time, '%Y-%m') desc
+            limit 12
+        ) b ON v.month = b.add_time
+        order by dict_name asc
+    </select>
+    <select id="entryNumTotal" resultType="java.lang.Integer"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis">
+        select IFNULL(count(1),0 ) dict_num from t_livestock where delete_flag = 0
+        <if test="deptIds != null and deptIds != '' ">
+            and dept_id in (${deptIds})
+        </if>
+    </select>
+    <select id="inNumByStatus" resultType="com.smart.brd.manage.base.entity.vo.AnalysisVo"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis">
+--        select situation dict_name,count(1) dict_num from t_livestock
+--        where delete_flag = 0
+--        GROUP BY situation
+        SELECT
+	        t1.dict_name,
+	        count( 1 ) dict_num
+        FROM
+	        t_livestock t
+	    LEFT JOIN ( SELECT tbd.dict_id, tbd.dict_name FROM t_base_dict tbd LEFT JOIN t_base_dict_type tbdt ON tbd.dict_type_id = tbdt.dict_type_id ) t1 ON t.`status` = t1.dict_id
+        WHERE
+	        t.delete_flag = 0
+        <if test="deptIds != null and deptIds != '' ">
+            and t.dept_id in (${deptIds})
+        </if>
+        GROUP BY
+	        t1.dict_name
+    </select>
+    <select id="inNumByYear" resultType="com.smart.brd.manage.base.entity.vo.AnalysisVo"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis">
+       SELECT a.click_date as dict_name,ifnull(b.countPig, 0) as dict_num
+       FROM
+       (SELECT
+        YEAR (now()) AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 1 AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 2 AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 3 AS click_date
+        UNION ALL
+        SELECT
+        YEAR (now()) - 4 AS click_date
+        ) a
+        left join
+        (select count(1) as countPig ,DATE_FORMAT(create_time, '%Y') as create_time
+        from t_livestock_shedentry
+		where month(create_time)=12 and delete_flag = 0
+        <if test="deptIds != null and deptIds != '' ">
+            and dept_id in (${deptIds})
+        </if>
+        group by DATE_FORMAT(create_time, '%Y')
+        LIMIT 5) b   ON a.click_date = b.create_time
+        order by dict_name asc
+    </select>
+    <select id="eliminateBySuitable" resultType="com.smart.brd.manage.base.entity.vo.AnalysisVo"  parameterType="com.smart.brd.manage.base.entity.TLivestockAnalysis">
+        SELECT
+	        dict.dict_name,
+	        count( 1 ) dict_num
+        FROM
+	        ( SELECT t2.suitable FROM t_livestock_escape t1 LEFT JOIN t_livestock_log t2 ON t1.livestock_id = t2.livestock_id
+	        where
+            <if test="deptIds != null and deptIds != '' ">
+                and t1.dept_id in (${deptIds})
+            </if>
+	        ) tt
+	        LEFT JOIN ( SELECT tbd.dict_id, tbd.dict_name FROM t_base_dict tbd LEFT JOIN t_base_dict_type tbdt ON tbd.dict_type_id = tbdt.dict_type_id ) dict ON tt.suitable = dict.dict_id
+        GROUP BY
+	        dict.dict_name;
+    </select>
+
+</mapper>

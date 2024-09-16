@@ -1,0 +1,333 @@
+package wlw.smart.fire.system.service.impl;
+
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import wlw.smart.fire.common.domain.FebsConst;
+import wlw.smart.fire.common.domain.QueryRequest;
+import wlw.smart.fire.common.exception.FebsException;
+import wlw.smart.fire.common.service.CacheService;
+import wlw.smart.fire.common.utils.MD5Util;
+import wlw.smart.fire.common.utils.SortUtil;
+import wlw.smart.fire.system.dao.DeptMapper;
+import wlw.smart.fire.system.dao.UserMapper;
+import wlw.smart.fire.system.dao.UserRoleMapper;
+import wlw.smart.fire.system.domain.po.Dept;
+import wlw.smart.fire.system.domain.po.User;
+import wlw.smart.fire.system.domain.po.UserRole;
+import wlw.smart.fire.system.domain.vo.UserVo;
+import wlw.smart.fire.system.manager.UserManager;
+import wlw.smart.fire.system.service.UserConfigService;
+import wlw.smart.fire.system.service.UserRoleService;
+import wlw.smart.fire.system.service.UserService;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * @author Pano
+ */
+@Slf4j
+@Service("userService")
+@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Resource
+    private UserRoleMapper userRoleMapper;
+    @Resource
+    private UserConfigService userConfigService;
+    @Resource
+    private CacheService cacheService;
+    @Resource
+    private UserRoleService userRoleService;
+    @Resource
+    private UserManager userManager;
+    @Resource
+    private DeptMapper deptMapper;
+    @Resource
+    private UserMapper userMapper;
+    @Resource
+    private RedisTemplate redisTemplate;
+
+    @Override
+    public User findByName(String username) {
+        return baseMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
+    }
+
+
+    @Override
+    public IPage<User> findUserDetail(User user, QueryRequest request) {
+        try {
+            Page<User> page = new Page<>();
+            SortUtil.handlePageSort(request, page, "user_id", FebsConst.ORDER_ASC, false);
+            user.setIsShow(1);
+            return this.baseMapper.findUserDetail(page, user);
+        } catch (Exception e) {
+            log.error("查询用户异常", e);
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateLoginTime(String username) throws Exception {
+        User user = new User();
+        user.setLastLoginTime(new Date());
+        this.baseMapper.update(user, new LambdaQueryWrapper<User>().eq(User::getUsername, username));
+
+        // 重新将用户信息加载到 redis中
+        cacheService.saveUser(username);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateLogin(String username,String openId) throws Exception {
+        User user = new User();
+        user.setLastLoginTime(new Date());
+        user.setOpenId(openId);
+        this.baseMapper.update(user, new LambdaQueryWrapper<User>().eq(User::getUsername, username));
+
+        // 重新将用户信息加载到 redis中
+        cacheService.saveUser(username);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void createUser(User user) throws Exception {
+        if (StringUtils.isNotEmpty(user.getUsername())) {
+            List<User> users = baseMapper.selectList(
+                    new LambdaQueryWrapper<User>().eq(User::getUsername, user.getUsername())
+            );
+            if (!users.isEmpty()) {
+                throw new FebsException("用户名重复，请重试");
+            }
+        }
+        // 创建用户
+        user.setCreateTime(new Date());
+        user.setPassTime(new Date());
+        user.setAvatar(User.DEFAULT_AVATAR);
+        user.setPassword(MD5Util.encrypt(user.getUsername(), User.DEFAULT_PASSWORD) );
+        //性别默认未知
+        if (ObjectUtil.isNull(user.getGender())) {
+            user.setGender(User.SEX_UNKNOW);
+        }
+        user.setIsXcx(0);
+        user.setIsShow(1);
+        save(user);
+
+        // 保存用户角色
+        if (StringUtils.isNotEmpty(user.getRoleId())) {
+            String[] roles = user.getRoleId().split(StringPool.COMMA);
+            setUserRoles(user, roles);
+        }
+
+        // 创建用户默认的个性化配置
+        userConfigService.initDefaultUserConfig(String.valueOf(user.getUserId()));
+        // 将用户相关信息保存到 Redis中
+        userManager.loadUserRedisCache(user);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateUser(User user) throws Exception {
+        // 更新用户
+        user.setPassword(null);
+        user.setModifyTime(new Date());
+        //性别默认未知
+        if (ObjectUtil.isNull(user.getGender())) {
+            user.setGender(User.SEX_UNKNOW);
+        }
+        updateById(user);
+
+        userRoleMapper.delete(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, user.getUserId()));
+
+        String[] roles = user.getRoleId().split(StringPool.COMMA);
+        setUserRoles(user, roles);
+
+        // 重新将用户信息，用户角色信息，用户权限信息 加载到 redis中
+        cacheService.saveUser(user.getUsername());
+        cacheService.saveRoles(user.getUsername());
+        cacheService.savePermissions(user.getUsername());
+    }
+    @Override
+    public void saveUser(User user) throws Exception {
+        save(user);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteUsers(String[] userIds) throws Exception {
+        // 先删除相应的缓存
+        this.userManager.deleteUserRedisCache(userIds);
+        List<String> list = Arrays.asList(userIds);
+        removeByIds(list);
+
+        // 删除用户角色
+        this.userRoleService.deleteUserRolesByUserId(userIds);
+        // 删除用户个性化配置
+        this.userConfigService.deleteByUserId(userIds);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateProfile(User user) throws Exception {
+        updateById(user);
+        // 重新缓存用户信息
+        cacheService.saveUser(user.getUsername());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateAvatar(String username, String avatar) throws Exception {
+        User user = new User();
+        user.setAvatar(avatar);
+
+        this.baseMapper.update(user, new LambdaQueryWrapper<User>().eq(User::getUsername, username));
+        // 重新缓存用户信息
+        cacheService.saveUser(username);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updatePassword(String username, String password,String oldPassword) throws Exception {
+        User user = new User();
+        user.setPassword(MD5Util.encrypt(username, password));
+        String oldPassWord = MD5Util.encrypt(username, oldPassword);
+        user.setModifyTime(new Date());
+        user.setPassTime(new Date());
+        this.baseMapper.update(user, new LambdaQueryWrapper<User>().eq(User::getUsername, username).eq(User::getPassword,oldPassWord));
+        // 重新缓存用户信息
+        cacheService.saveUser(username);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void register(String username, String password) throws Exception {
+        User user = new User();
+        user.setPassword(MD5Util.encrypt(username, password));
+        user.setUsername(username);
+        user.setCreateTime(new Date());
+        user.setPassTime(new Date());
+        user.setStatus(User.STATUS_VALID);
+        user.setGender(User.SEX_UNKNOW);
+        user.setAvatar(User.DEFAULT_AVATAR);
+        user.setDescription("注册用户");
+        this.save(user);
+
+        UserRole ur = new UserRole();
+        ur.setUserId(user.getUserId());
+        // 注册用户角色 ID
+        ur.setRoleId(2L);
+        this.userRoleMapper.insert(ur);
+
+        // 创建用户默认的个性化配置
+        userConfigService.initDefaultUserConfig(String.valueOf(user.getUserId()));
+        // 将用户相关信息保存到 Redis中
+        userManager.loadUserRedisCache(user);
+
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void resetPassword(String[] usernames) throws Exception {
+        for (String username : usernames) {
+            User user = new User();
+            user.setPassword(MD5Util.encrypt(username, User.DEFAULT_PASSWORD));
+            this.baseMapper.update(user, new LambdaQueryWrapper<User>().eq(User::getUsername, username));
+            // 重新将用户信息加载到 redis中
+            cacheService.saveUser(username);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void changeStatus(UserVo vo) throws Exception {
+        User user = this.getById(vo.getUserId());
+        Assert.state(ObjectUtil.isNotNull(user), "数据错误");
+        user.setStatus(vo.getStatus());
+        this.baseMapper.updateById(user);
+
+        // 重新将用户信息加载到 redis中
+        cacheService.saveUser(user.getUsername());
+    }
+
+    @Override
+    public void setUserRoles(User user, String[] roles) {
+        Arrays.stream(roles).forEach(roleId -> {
+            UserRole ur = new UserRole();
+            ur.setUserId(user.getUserId());
+            ur.setRoleId(Long.valueOf(roleId));
+            this.userRoleMapper.insert(ur);
+        });
+    }
+
+    @Override
+    public User findByOpenId(String openId) {
+        return baseMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getOpenId, openId));
+    }
+    @Override
+    public void resetUserPassWord(String username) throws Exception {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(MD5Util.encrypt(username, User.DEFAULT_PASSWORD) );
+        this.baseMapper.update(user, new LambdaQueryWrapper<User>().eq(User::getUsername, username));
+        // 重新缓存用户信息
+        cacheService.saveUser(username);
+    }
+
+    @Override
+    public String getDeptIds(Long id) {
+        if (id==null){
+            return "";
+        }
+        StringBuffer stringBuffer=new StringBuffer();
+        stringBuffer.append(id);
+        addChildIds(id,stringBuffer);
+        String string=new String(stringBuffer);
+        return string;
+    }
+    private void addChildIds(Long parentId,StringBuffer stringBuffer){
+        List<Dept> depts = deptMapper.selectList(new QueryWrapper<Dept>().eq("parent_id", parentId));
+        for(Dept son:depts){
+            stringBuffer.append(","+son.getDeptId());
+            addChildIds(son.getDeptId(),stringBuffer);
+        }
+    }
+
+    @Override
+    public Long querySysConfig() {
+        String key = "t_sys_config_";
+        Long time_expire = null;
+        try{
+            String time_expire_Str = String.valueOf(redisTemplate.opsForValue().get(key));
+            if (time_expire_Str == null){
+                UserVo vo = userMapper.querySysConfig();
+                time_expire = vo.getTimeExpire();
+                redisTemplate.opsForValue().set(key,time_expire,1, TimeUnit.DAYS);
+            }else{
+                time_expire = Long.parseLong(time_expire_Str);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+        return time_expire;
+    }
+
+}

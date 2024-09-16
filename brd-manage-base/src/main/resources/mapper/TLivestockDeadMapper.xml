@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TLivestockDeadMapper">
+
+
+    <select id="tLivestockDeadList" parameterType="com.smart.brd.manage.base.entity.vo.DeadVo" resultType="com.smart.brd.manage.base.entity.vo.DeadVo">
+        select d.id,t.device_code,t.suitable,t.shed_name,t.bed_name,t.birth_date,t.entry_date,t.supplier_name,d.dead_date,d.dict_id,d.dict_name from t_livestock t,t_livestock_dead d
+        where t.livestock_id=d.livestock_id and t.delete_flag = 1
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        <if test="vo.suitable != null and vo.suitable != ''">
+            and t.suitable = #{vo.suitable}
+        </if>
+        <if test="vo.shedId != null ">
+            and t.shed_id = #{vo.shedId}
+        </if>
+        <if test="vo.bedId != null ">
+            and t.bed_id = #{vo.bedId}
+        </if>
+        <if test="vo.dictId != null ">
+            and d.dict_id = #{vo.dictId}
+        </if>
+        <if test="vo.startTime != null and vo.startTime != '' ">
+            and d.dead_date &gt;= #{vo.startTime}
+        </if>
+        <if test="vo.endTime != null and vo.endTime != '' ">
+            and d.dead_date &lt;= #{vo.endTime}
+        </if>
+        ORDER BY d.dead_date desc
+    </select>
+
+    <select id="tLivestockDeadDetail" parameterType="com.smart.brd.manage.base.entity.vo.DeadVo" resultType="com.smart.brd.manage.base.entity.vo.DeadVo">
+        select d.id,t.device_code,t.suitable,t.shed_name,t.bed_name,t.birth_date,t.entry_date,t.supplier_name,d.dead_date,d.dict_id,d.dict_name,t.credit_code from t_livestock_log t,t_livestock_dead d
+        where t.livestock_id=d.livestock_id and t.delete_flag = 0
+        <if test="vo.id != null ">
+            and d.id = #{vo.id}
+        </if>
+    </select>
+
+
+</mapper>

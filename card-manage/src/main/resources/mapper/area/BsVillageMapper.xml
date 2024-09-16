@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.card.common.area.mapper.BsVillageMapper">
+
+    <select id="queryVillagesByCode" resultType="com.smart.card.common.area.entity.BsRegion" parameterType="java.lang.String">
+        select t.village_code regionCode,t.village_name regionName,t.level from bs_village t
+        <where>
+            <if test=" code != null and code != '' ">
+                t.street_code = #{code}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryVillageByCode" resultType="com.smart.card.common.area.entity.BsRegion" parameterType="java.lang.String">
+        select t.village_code regionCode,t.village_name regionName,t.level from bs_village t
+        where t.village_code = #{code}
+    </select>
+</mapper>

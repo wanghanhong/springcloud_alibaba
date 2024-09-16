@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TLivestockOutMapper">
+
+    <select id="tLivestockOutList" resultType="com.smart.brd.manage.base.entity.TLivestockOut">
+        SELECT * from t_livestock_out t where t.delete_flag = 0
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        <if test="vo.startTime != null and vo.startTime != '' ">
+            and t.out_date &gt;= #{vo.startTime}
+        </if>
+        <if test="vo.endTime != null and vo.endTime != '' ">
+            and t.out_date &lt;= #{vo.endTime}
+        </if>
+        <if test="vo.outNumber != null and vo.outNumber != '' ">
+            and t.out_number = #{vo.outNumber}
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+</mapper>

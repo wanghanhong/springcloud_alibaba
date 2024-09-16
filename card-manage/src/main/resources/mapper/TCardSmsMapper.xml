@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.card.manage.mapper.TCardSmsMapper">
+
+
+    <select id="tCardSmsList" parameterType="com.smart.card.manage.entity.TCardSms" resultType="com.smart.card.manage.entity.TCardSms">
+        SELECT * from t_card_sms t where t.delete_flag = 0
+        <if test="vo.iccid != null ">
+            and t.iccid = #{vo.iccid}
+        </if>
+        <if test="vo.msisdn != null ">
+            and t.msisdn = #{vo.msisdn}
+        </if>
+        <if test="vo.startTime != null and vo.startTime != '' ">
+            and t.begin_time &gt;= #{vo.startTime}
+        </if>
+        <if test="vo.endTime != null and vo.endTime != '' ">
+            and t.begin_time &lt;= #{vo.endTime}
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+
+
+</mapper>

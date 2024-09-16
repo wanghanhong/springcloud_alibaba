@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.access.mapper.TDeviceWaterpressMapper">
+
+    <select id="findPressDevice" resultType="java.lang.Long">
+        SELECT imei
+        from t_device_waterpress
+    </select>
+
+
+    <select id="findWaterpressIds" resultType="java.lang.Long">
+        SELECT id
+        from t_device_waterpress
+    </select>
+
+    <select id="deviceWaterpresssAll" resultType="com.smart.device.common.access.entity.TDeviceWaterpress" parameterType="com.smart.device.common.access.entity.TDeviceWaterpress">
+        select id,device_name deviceName from t_device_waterpress t where t.delete_flag = 0
+        <if test="vo.id != null ">
+            and t.id = #{vo.id}
+        </if>
+        <if test="vo.deviceType != null ">
+            and t.device_type = #{vo.deviceType}
+        </if>
+        <if test="vo.deviceName != null and vo.deviceName != ''">
+            and t.device_name like concat('%',#{vo.deviceName},'%')
+        </if>
+    </select>
+
+
+    <select id="selectDeviceWaterpress" parameterType="com.smart.device.common.access.entity.vo.DeviceBaseVo" resultType="com.smart.device.common.access.entity.vo.DeviceBaseVo">
+        select * from t_device_Waterpress t where t.delete_flag = 0
+        <if test="vo.id != null ">
+            and t.id = #{vo.id}
+        </if>
+        <if test="vo.imei != null ">
+            and t.imei = #{vo.imei}
+        </if>
+        order by t.create_time desc limit 1
+    </select>
+
+    <select id="selectWaterpressAllHigh" parameterType="com.smart.device.common.access.entity.vo.DeviceBaseVo" resultType="com.smart.device.common.access.entity.vo.DeviceBaseVo">
+        select t.id deviceId,t.device_type from t_device_Waterpress t,t_device_dict t1 where t.device_type = t1.device_type and t1.`status` = 2 and t1.heart_interval  &lt; 10 ;
+    </select>
+    <select id="selectWaterpressAllLow" parameterType="com.smart.device.common.access.entity.vo.DeviceBaseVo" resultType="com.smart.device.common.access.entity.vo.DeviceBaseVo">
+        select t.id deviceId,t.device_type from t_device_Waterpress t,t_device_dict t1 where t.device_type = t1.device_type and t1.`status` = 2 and t1.heart_interval  &gt; 10 ;
+    </select>
+
+</mapper>

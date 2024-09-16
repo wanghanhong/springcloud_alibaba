@@ -1,0 +1,23 @@
+{
+  "groups": [
+    {
+      "name": "febs",
+      "type": "com.smart.brd.sys.common.properties.FebsProperties",
+      "sourceType": "com.smart.brd.sys.common.properties.FebsProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "febs.open-aop-log",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.smart.brd.sys.common.properties.FebsProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "febs.shiro",
+      "type": "com.smart.brd.sys.common.properties.ShiroProperties",
+      "sourceType": "com.smart.brd.sys.common.properties.FebsProperties"
+    }
+  ],
+  "hints": []
+}

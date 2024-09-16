@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TEditionMapper">
+
+
+    <select id="tEditionList" parameterType="com.smart.brd.manage.base.entity.TEdition" resultType="com.smart.brd.manage.base.entity.TEdition">
+        SELECT * from t_edition t where t.delete_flag = 0
+        <if test="vo.editionCode != null and vo.editionCode != '' ">
+            and t.edition_code like concat ("%",#{vo.editionCode},"%")
+        </if>
+        <if test="vo.editionContent != null and vo.editionContent != '' ">
+            and t.edition_content like concat ("%",#{vo.editionContent},"%")
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+
+
+</mapper>

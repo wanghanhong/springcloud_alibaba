@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TDrugMapper">
+
+
+    <select id="tDrugList" parameterType="com.smart.brd.manage.base.entity.TDrug" resultType="com.smart.brd.manage.base.entity.TDrug">
+        SELECT  * from t_drug t  where t.delete_flag = 0
+        <if test="vo.startTime != null and vo.startTime != '' ">
+            and DATE(t.create_time) &gt;= #{vo.startTime}
+        </if>
+        <if test="vo.endTime != null and vo.endTime != '' ">
+            and DATE(t.create_time) &lt;= #{vo.endTime}
+        </if>
+        <!--<if test="vo.unitPriceMin != null and vo.unitPriceMin != '' ">-->
+            <!--and t.price &gt;= #{vo.unitPriceMin}-->
+        <!--</if>-->
+        <!--<if test="vo.unitPriceMax != null and vo.unitPriceMax != '' ">-->
+            <!--and t.price &lt;= #{vo.unitPriceMax}-->
+        <!--</if>-->
+        <if test="vo.diseasesName != null and vo.diseasesName != '' ">
+            and t.diseases_name like concat('%',#{vo.diseasesName},'%')
+            <!--这样可以模糊匹配数字-->
+            <!--
+            and (t.diseases like #{vo.diseasesName}
+                OR t.diseases like concat(#{vo.diseasesName},',%')
+                OR t.diseases like concat('%,',#{vo.diseasesName})
+                OR t.diseases like concat('%,',#{vo.diseasesName},',%')
+            )
+            -->
+        </if>
+        <!--<if test="vo.unitPrice != null and vo.unitPrice != '' ">-->
+            <!--and t.unit_price = #{vo.unitPrice}-->
+        <!--</if>-->
+        <if test="vo.drugBatch != null and vo.drugBatch != '' ">
+            and t.drug_batch  like concat('%',#{vo.drugBatch},'%')
+        </if>
+        <if test="vo.suitable != null and vo.suitable != '' ">
+            and t.suitable like concat('%',#{vo.suitable},'%')
+        </if>
+        <if test="vo.supplierName != null and vo.supplierName != '' ">
+            and t.supplier_name like concat('%',#{vo.supplierName},'%')
+        </if>
+        <if test="vo.manufacturer != null and vo.manufacturer != '' ">
+            and t.manufacturer like concat('%',#{vo.manufacturer},'%')
+        </if>
+        <if test="vo.effect != null and vo.effect != '' ">
+            and t.effect like concat('%',#{vo.effect},'%')
+        </if>
+        <if test="vo.drugCode != null and vo.drugCode != '' ">
+            and t.drug_code like concat('%',#{vo.drugCode},'%')
+        </if>
+        <if test="vo.drugName != null and vo.drugName != '' ">
+            and t.drug_name like concat('%',#{vo.drugName},'%')
+        </if>
+        <!--<if test="vo.deptIds != null and vo.deptIds != '' ">-->
+            <!--and t.dept_id in (${vo.deptIds})-->
+        <!--</if>-->
+        <!--<if test="vo.price != null and vo.price != '' ">-->
+            <!--and t.price = #{vo.price}-->
+        <!--</if>-->
+        <!--<if test="vo.priceMin != null and vo.priceMin != '' ">-->
+            <!--and t.price &gt;= #{vo.priceMin}-->
+        <!--</if>-->
+
+        <!--<if test="vo.priceMax != null and vo.priceMax != '' ">-->
+            <!--and t.price &lt;= #{vo.priceMax}-->
+        <!--</if>-->
+        ORDER BY t.create_time desc
+    </select>
+
+
+</mapper>

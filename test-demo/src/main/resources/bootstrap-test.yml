@@ -1,0 +1,32 @@
+nacos:
+  url: 172.22.1.21
+  port: 8500
+# nacos 的配置
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: ${nacos.url}:${nacos.port}
+        group: DEFAULT_GROUP
+        prefix: test-demo
+        file-extension: yaml
+      discovery:
+        server-addr: ${nacos.url}:${nacos.port}
+    inetutils:
+      preferred-networks: 172.22
+# seata 的配置
+seata:
+  enabled: true
+  application-id: test-demo
+  tx-service-group: yyk_tx_group
+  config:
+    type: nacos
+    nacos:
+      namespace:
+      serverAddr: ${nacos.url}:${nacos.port}
+      group: SEATA_GROUP
+  registry:
+    type: nacos
+    nacos:
+      server-addr: ${nacos.url}:${nacos.port}
+      namespace:

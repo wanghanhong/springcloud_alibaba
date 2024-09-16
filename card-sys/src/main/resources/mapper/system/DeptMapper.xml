@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.card.sys.system.dao.DeptMapper">
+
+    <select id="findDeptPage" parameterType="com.smart.card.sys.system.domain.po.Dept" resultType="com.smart.card.sys.system.domain.po.Dept">
+        SELECT t.* from t_dept t where t.dept_id > 0
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+    </select>
+
+    <select id="getDeptIdByDeptName" parameterType="string" resultType="com.smart.card.sys.system.domain.po.Dept">
+        SELECT * from t_dept t where t.DEPT_NAME = #{0}
+    </select>
+    <select id="deptNameQuery" parameterType="string" resultType="java.lang.Long">
+        SELECT t.dept_id from t_dept t where t.parent_id = 0 and t.DEPT_NAME = #{0}
+    </select>
+
+    <select id="queryDeptSons" parameterType="com.smart.card.sys.system.domain.po.Dept" resultType="com.smart.card.sys.system.domain.po.Dept">
+        SELECT t.* from t_dept t where t.dept_id > 0
+        <if test="vo.deptId != null ">
+            and t.parent_id = #{vo.deptId}
+        </if>
+    </select>
+
+</mapper>

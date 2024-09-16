@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TSupplierMapper">
+
+
+    <select id="tSupplierList" parameterType="com.smart.brd.manage.base.entity.TSupplier" resultType="com.smart.brd.manage.base.entity.TSupplier">
+        SELECT * from t_supplier t where t.delete_flag = 0
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+    <select id="getSupplierFromCredit" resultType="com.smart.brd.manage.base.entity.TSupplier">
+        SELECT * from t_supplier t where t.delete_flag = 0 and t.credit_code = #{creditCode}
+    </select>
+
+
+</mapper>

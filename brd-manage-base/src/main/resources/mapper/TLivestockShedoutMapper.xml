@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TLivestockShedoutMapper">
+
+    <select id="tLivestockShedoutList" resultType="com.smart.brd.manage.base.entity.vo.ShedOutVo">
+        SELECT t.*,g.type,g.birth_date,g.entry_date,g.shed_name,g.bed_name,b.dict_name as varietie,TIMESTAMPDIFF(DAY,g.entry_date,t.out_date) as entry_time from t_livestock_shedout t
+        left join t_livestock_out o on t.out_id = o.id
+        left JOIN t_livestock_log g on g.livestock_id = t.livestock_id
+        left join t_base_dict b on b.dict_id = g.varieties
+        where t.delete_flag = 0
+        <if test="vo.outId != null and vo.outId != '' ">
+            and t.out_id = #{vo.outId}
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        <if test="vo.shedId != null and vo.shedId != '' ">
+            and t.livestock_id in (select livestock_id from t_livestock where shed_id = #{vo.shedId})
+        </if>
+        <if test="vo.bedId != null and vo.bedId != '' ">
+            and t.livestock_id in (select livestock_id from t_livestock where bed_id = #{vo.bedId})
+        </if>
+        <if test="vo.suitable != null and vo.suitable != '' ">
+            and g.suitable = #{vo.suitable}
+        </if>
+        <if test="vo.startTime != null and vo.startTime != '' ">
+            and t.livestock_id in (select livestock_id from t_livestock where g.entry_date &gt;= #{vo.startTime})
+        </if>
+        <if test="vo.endTime != null and vo.endTime != '' ">
+            and t.livestock_id in (select livestock_id from t_livestock where g.entry_date &lt;= #{vo.endTime})
+        </if>
+        <if test="vo.startOutTime != null and vo.startOutTime != '' ">
+            and t.livestock_id in (select livestock_id from t_livestock where t.out_date &gt;= #{vo.startOutTime})
+        </if>
+        <if test="vo.endOutTime != null and vo.endOutTime != '' ">
+            and t.livestock_id in (select livestock_id from t_livestock where t.out_date &lt;= #{vo.endOutTime})
+        </if>
+        <if test="vo.varietie != null and vo.varietie != '' ">
+            and g.varieties = #{vo.varietie}
+        </if>
+        <if test="vo.entryTime != null and vo.entryTime != '' ">
+            and TIMESTAMPDIFF(DAY,g.entry_date,t.out_date) = #{vo.entryTime}
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+    <select id="selectByOutId" resultType="java.lang.Integer">
+        SELECT count(1) from t_livestock_shedout t where t.delete_flag = 0 and t.out_id = #{id}
+    </select>
+    <select id="selectDetailById" resultType="com.smart.brd.manage.base.entity.vo.ShedOutVo">
+        SELECT t.*,g.type,g.birth_date,g.entry_date,g.shed_name,g.bed_name,b.dict_name as varietie,TIMESTAMPDIFF(DAY,g.entry_date,t.out_date) as entry_time from t_livestock_shedout t
+        left join t_livestock_out o on t.out_id = o.id
+        left JOIN t_livestock_log g on g.livestock_id = t.livestock_id
+        left join t_base_dict b on b.dict_id = g.varieties
+        where t.delete_flag = 0 and t.id = #{shedoutId}
+    </select>
+</mapper>

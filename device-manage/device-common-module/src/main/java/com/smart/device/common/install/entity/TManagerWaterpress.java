@@ -1,0 +1,119 @@
+package com.smart.device.common.install.entity;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+/**
+ * 电力设备安装信息
+ *
+ * @author f
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("t_manager_waterpress")
+public class TManagerWaterpress implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private Long id;
+
+    @ApiModelProperty(value = "设备ID")
+    private Long deviceId;
+    @ApiModelProperty(value = "设备编号")
+    private Long deviceCode;
+    @ApiModelProperty(value = "IMEI")
+    private Long imei;
+    @ApiModelProperty(value = "设备类型")
+    private Integer deviceType;
+    @ApiModelProperty(value = "设备类型")
+    private Integer parentType;
+    @ApiModelProperty(value = "设备类型")
+    private String deviceTypeName;
+    @ApiModelProperty(value = "设备名称")
+    private String deviceName;
+    @ApiModelProperty(value = "设备型号")
+    private String deviceModel;
+    @ApiModelProperty(value = "单位ID")
+    private Long companyId;
+    @ApiModelProperty(value = "单位名称")
+    private String companyName;
+    @ApiModelProperty(value = "建筑物编号")
+    private Long buildingId;
+    @ApiModelProperty(value = "建筑物名称")
+    private String buildingName;
+    @ApiModelProperty(value = "楼层")
+    private Integer buildingFloor;
+    @ApiModelProperty(value = "安装位置")
+    private String location;
+    @ApiModelProperty(value = "经度")
+    private String longitude;
+    @ApiModelProperty(value = "纬度")
+    private String latitude;
+
+    /**
+     * 设备状态 0 新安装 1 在线 2 离线 3  报废
+     */
+    @ApiModelProperty(value = "设备状态")
+    private Integer deviceState;
+
+    /**
+     * 设备状态 0 新安装 1 在线 2 离线 3  报废
+     */
+    @ApiModelProperty(value = "设备状态")
+    private String deviceStateName;
+
+    @ApiModelProperty(value = "设备安装图地址")
+    private String fileUrl;
+
+    /**
+     * 添加时间
+     */
+    @ApiModelProperty(value = "添加时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
+    private LocalDateTime createTime;
+    @ApiModelProperty(value = "更新时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
+    private LocalDateTime updateTime;
+    /**
+     * 删除标识(0 正常 1删除)
+     */
+    @ApiModelProperty(value = "删除标识")
+    private Integer deleteFlag;
+    @ApiModelProperty(value = "最后上报时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
+    private LocalDateTime finalTime;
+
+    @ApiModelProperty(value = "设备描述")
+    private String questionContent;
+
+
+    @TableField(exist = false)
+    private String fileUrlString;
+    @TableField(exist = false)
+    private Long oldbuildingId;
+    @TableField(exist = false)
+    private Integer oldbuildingFloor;
+    // 操作人
+    private Long opUserId;
+
+    @ApiModelProperty(value = "省")
+    private String province;
+    @ApiModelProperty(value = "市")
+    private String city;
+    @ApiModelProperty(value = "县")
+    private String county;
+    @ApiModelProperty(value = "乡村")
+    private String town;
+    @ApiModelProperty(value = "小区")
+    private String housing;
+
+
+}

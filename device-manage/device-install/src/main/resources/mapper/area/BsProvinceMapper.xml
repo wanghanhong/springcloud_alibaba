@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.install.mapper.area.BsProvinceMapper">
+
+    <select id="queryProvincesByCode" resultType="com.smart.device.common.install.entity.TBaseRegion" parameterType="java.lang.String">
+        select t.province_code regionCode,t.province_name regionName,t.level from bs_province t
+        <where>
+            <if test=" code != null and code != '' ">
+                t.province_code = #{code}
+            </if>
+        </where>
+        order by t.sort
+    </select>
+
+</mapper>

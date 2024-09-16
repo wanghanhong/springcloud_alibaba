@@ -1,0 +1,83 @@
+ info:
+  nacos:
+    address: 172.22.1.21:8500
+  fdfs:
+    nginx: 172.22.1.21:8888
+server:
+  port: 10000
+spring:
+  application:
+    name: test-demo
+  servlet:
+    multipart:
+      max-file-size: 100MB # 最大支持文件大小
+      max-request-size: 100MB # 最大支持请求大小
+  cloud:
+    nacos:
+      discovery:
+        service: ${spring.application.name}
+        server-addr: ${info.nacos.address}
+
+      config:
+        server-addr: ${info.nacos.address}
+        file-extension: yaml
+        prefix: ${spring.application.name}
+    inetutils:
+      preferred-networks: 172.22
+    stream:
+      bindings:
+        #定义name为input的binding
+        input:
+          content-type: application/json
+          destination: test-topic
+          group: test-group
+        # 定义name为output的binding
+        output:
+          content-type: application/json
+          destination: test-topic
+      rocketmq:
+        binder:
+          # 配置rocketmq的nameserver地址
+          name-server: 172.22.1.21:9876
+    alibaba:
+      seata:
+        tx-service-group: my_test_tx_group
+  profiles:
+    active: dev
+  main:
+    allow-bean-definition-overriding: true
+# seata 的配置
+seata:
+  enabled: true
+  application-id: test-demo
+  tx-service-group: my_test_tx_group
+  config:
+    type: nacos
+    nacos:
+      namespace:
+      serverAddr: ${info.nacos.address}
+  registry:
+    type: nacos
+    nacos:
+      server-addr: ${info.nacos.address}
+      namespace:
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+# 分布式文件系统FDFS配置
+fdfs:
+  soTimeout: 1500 #socket连接超时时长
+  connectTimeout: 600 #连接tracker服务器超时时长
+  web-server-url: http://${info.fdfs.nginx}/ #FDFS中的nginx的ip和port
+  thumbImage: #缩略图生成参数，可选
+    width: 150
+    height: 150
+  trackerList: #TrackerList参数,支持多个，我这里只有一个，如果有多个在下方加- x.x.x.x:port
+    - 172.22.1.21:22122
+  pool:
+    max-total: 100
+    max-wait-millis: 60
+

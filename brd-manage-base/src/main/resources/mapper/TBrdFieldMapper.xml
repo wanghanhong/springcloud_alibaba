@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TBrdFieldMapper">
+
+
+    <select id="tBrdFieldList" parameterType="com.smart.brd.manage.base.entity.TBrdField" resultType="com.smart.brd.manage.base.entity.vo.BrdFieldVo">
+        SELECT * from t_brd_field t where t.delete_flag = 0
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and ( t.field_id in (${vo.deptIds}) or t.dept_id in (${vo.deptIds}))
+        </if>
+        <if test="vo.fieldNumber != null and vo.fieldNumber != '' ">
+            and t.field_number like concat('%',#{vo.fieldNumber},'%')
+        </if>
+        <if test="vo.fieldName != null and vo.fieldName != '' ">
+            and t.field_name like concat('%',#{vo.fieldName},'%')
+        </if>
+        <if test="vo.type != null and vo.type != '' ">
+            and t.type like concat('%',#{vo.type},'%')
+        </if>
+        <if test="vo.fieldContact != null and vo.fieldContact != '' ">
+            and t.field_contact like concat('%',#{vo.fieldContact},'%')
+        </if>
+        <if test="vo.county != null and vo.county != '' ">
+            AND concat( `province`, `city`, `county`, `town` ) LIKE CONCAT('%',#{vo.county},'%')
+            or concat( `province`, `city`, `county`) LIKE CONCAT('%',#{vo.county},'%')
+            or concat( `province`, `city` ) LIKE CONCAT('%',#{vo.county},'%')
+            or concat( `province`) LIKE CONCAT('%',#{vo.county},'%')
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+
+    <select id="selectSysDept"  parameterType="java.lang.Long" resultType="java.lang.Long" >
+        SELECT dept_id fieldId from brd_sys.t_dept t where dept_id = #{id}
+    </select>
+
+    <select id="selectfieldNumber"  parameterType="java.lang.String" resultType="java.lang.Long" >
+        select max(t.field_number) fieldNumber from t_brd_field t where t.county = #{county} and t.delete_flag = 0
+    </select>
+
+    <insert id="insertSysDept" parameterType="com.smart.brd.manage.base.entity.TBrdField" >
+        insert into brd_sys.t_dept(dept_id,dept_name,parent_id,type,dept_code,dept_address,longitude,latitude,province,city,county,town)
+        values (#{vo.fieldId},#{vo.fieldName},#{vo.parentId},#{vo.type},#{vo.identity},#{vo.fieldAddress}, #{vo.longitude},#{vo.latitude},#{vo.province},#{vo.city},#{vo.county},#{vo.town})
+    </insert>
+
+    <update id="updateSysDept" parameterType="com.smart.brd.manage.base.entity.TBrdField">
+        update brd_sys.t_dept
+        <set>
+            <if test="vo.fieldName != null ">
+                dept_name = #{vo.fieldName},
+            </if>
+            <if test="vo.identity != null ">
+                dept_code = #{vo.identity},
+            </if>
+            <if test="vo.fieldAddress != null ">
+                dept_address = #{vo.fieldAddress},
+            </if>
+            <if test="vo.longitude != null ">
+                longitude = #{vo.longitude},
+            </if>
+            <if test="vo.latitude != null ">
+                latitude = #{vo.latitude},
+            </if>
+            <if test="vo.province != null and vo.province != ''">
+                province = #{vo.province},
+            </if>
+            <if test="vo.city != null and vo.city != ''">
+                city = #{vo.city},
+            </if>
+            <if test="vo.county != null and vo.county != ''">
+                county = #{vo.county},
+            </if>
+            <if test="vo.town != null and vo.town != ''">
+                town = #{vo.town}
+            </if>
+        </set>
+        where dept_id = #{vo.fieldId}
+    </update>
+
+    <update id="deleteSysDept" parameterType="java.lang.Long">
+        delete from brd_sys.t_dept where dept_id = #{id} ;
+    </update>
+
+    <select id="selectSysDeptSon"  parameterType="java.lang.Long" resultType="java.lang.Long" >
+        SELECT dept_id fieldId from brd_sys.t_dept t where parent_id = #{id}
+    </select>
+
+
+</mapper>

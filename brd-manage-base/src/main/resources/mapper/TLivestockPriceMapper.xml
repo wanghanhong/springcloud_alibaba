@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TLivestockPriceMapper">
+
+
+    <select id="tLivestockPriceList" resultType="com.smart.brd.manage.base.entity.TLivestockPrice">
+        select t.price,DATE_FORMAT(t.price_time,'%Y-%m') price_time from  t_livestock_price t
+        where t.type = 1 order by t.price_time desc limit 12
+    </select>
+
+
+</mapper>

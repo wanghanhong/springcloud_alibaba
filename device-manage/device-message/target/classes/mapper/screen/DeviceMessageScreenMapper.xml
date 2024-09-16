@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.message.data.mapper.screen.DeviceMessageScreenMapper">
+
+    <select id="deviceSmokeEventNum"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+          select t.parent_event_code eventCode,t.event_code_name eventCodeName,t4.sumx countNum from t_strategy_alarm_type t,
+              (select t.parent_event_code,sum(t2.countx) sumx from t_strategy_alarm t left join (
+				        select t.event_code,t.device_type,count(*) countx
+                        from t_alarm_smoke t where t.parent_type = #{vo.parentType} and t.create_time &gt;= #{vo.startTime}  and t.create_time &lt;= #{vo.endTime}
+                        group by t.event_code,t.device_type
+				) t2 on t.device_type = t2.device_type and t.event_code = t2.event_code
+				 where t.parent_type = #{vo.parentType} GROUP BY t.parent_event_code) t4
+				 where t.parent_event_code=t4.parent_event_code and t.parent_event_code >-1
+				 and t.parent_type = #{vo.parentType}
+    </select>
+    <select id="deviceWaterpressEventNum"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+        select t.parent_event_code eventCode,t.event_code_name eventCodeName,t4.sumx countNum from t_strategy_alarm_type t,
+              (select t.parent_event_code,sum(t2.countx) sumx from t_strategy_alarm t left join (
+				        select t.event_code,t.device_type,count(*) countx
+                        from t_alarm_waterpress t where t.parent_type = #{vo.parentType} and t.create_time &gt;= #{vo.startTime}  and t.create_time &lt;= #{vo.endTime}
+                        group by t.event_code,t.device_type
+				) t2 on t.device_type = t2.device_type and t.event_code = t2.event_code
+				 where t.parent_type = #{vo.parentType} GROUP BY t.parent_event_code) t4
+				 where t.parent_event_code=t4.parent_event_code and t.parent_event_code >-1
+				 and t.parent_type = #{vo.parentType}
+    </select>
+    <select id="deviceElectricEventNum"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+        select t.parent_event_code eventCode,t.event_code_name eventCodeName,t4.sumx countNum from t_strategy_alarm_type t,
+              (select t.parent_event_code,sum(t2.countx) sumx from t_strategy_alarm t left join (
+				        select t.event_code,t.device_type,count(*) countx
+                        from t_alarm_electric t where t.parent_type = #{vo.parentType} and t.create_time &gt;= #{vo.startTime}  and t.create_time &lt;= #{vo.endTime}
+                        group by t.event_code,t.device_type
+				) t2 on t.device_type = t2.device_type and t.event_code = t2.event_code
+				 where t.parent_type = #{vo.parentType} GROUP BY t.parent_event_code) t4
+				 where t.parent_event_code=t4.parent_event_code and t.parent_event_code >-1
+				 and t.parent_type = #{vo.parentType}
+    </select>
+
+
+    <select id="eventNumByCompanySmoke"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+       select  t4.countx countNum,t3.id company_id,t3.company_name,t3.type,t3.type_name,t3.incharge_name,t3.incharge_phone from
+       (select  t2.company_id,sum(countx) countx  from
+       (select t6.device_id,sum(countx) countx from (
+				select  t.event_code,t.device_type,t.device_id,count(*) countx  from t_alarm_smoke t where
+				t.parent_type = #{vo.parentType} and t.create_time &gt;= #{vo.startTime}  and t.create_time &lt;= #{vo.endTime} GROUP BY t.event_code,t.device_type,t.device_id ) t6,t_strategy_alarm t where t.device_type = t6.device_type and t.event_code = t6.event_code
+				and t.parent_type = #{vo.parentType} and t.strategy_type >= 0  GROUP BY t6.device_id ) t1,
+       db_device_manager.t_manager_smoke t2,db_device_manager.t_base_company t3
+        where t1.device_id = t2.device_id and t2.company_id=t3.id GROUP BY t2.company_id ORDER BY countx desc limit 20 ) t4,db_device_manager.t_base_company t3
+        where t4.company_id=t3.id ;
+    </select>
+    <select id="eventNumByCompanyWaterpress"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+       select  t4.countx countNum,t3.id company_id,t3.company_name,t3.type,t3.type_name,t3.incharge_name,t3.incharge_phone from
+       (select  t2.company_id,sum(countx) countx  from
+       (select t6.device_id,sum(countx) countx from (
+				select  t.event_code,t.device_type,t.device_id,count(*) countx  from t_alarm_waterpress t where
+				t.parent_type = #{vo.parentType} and t.create_time &gt;= #{vo.startTime}  and t.create_time &lt;= #{vo.endTime} GROUP BY t.event_code,t.device_type,t.device_id ) t6,t_strategy_alarm t where t.device_type = t6.device_type and t.event_code = t6.event_code
+				and t.parent_type = #{vo.parentType} and t.strategy_type >= 0  GROUP BY t6.device_id ) t1,
+       db_device_manager.t_manager_waterpress t2,db_device_manager.t_base_company t3
+        where t1.device_id = t2.device_id and t2.company_id=t3.id GROUP BY t2.company_id ORDER BY countx desc limit 20 ) t4,db_device_manager.t_base_company t3
+        where t4.company_id=t3.id ;
+
+    </select>
+    <select id="eventNumByCompanyElectric"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+       select  t4.countx countNum,t3.id company_id,t3.company_name,t3.type,t3.type_name,t3.incharge_name,t3.incharge_phone from
+       (select  t2.company_id,sum(countx) countx  from
+       (select t6.device_id,sum(countx) countx from (
+				select  t.event_code,t.device_type,t.device_id,count(*) countx  from t_alarm_electric t where
+				t.parent_type = #{vo.parentType} and t.create_time &gt;= #{vo.startTime}  and t.create_time &lt;= #{vo.endTime} GROUP BY t.event_code,t.device_type,t.device_id ) t6,t_strategy_alarm t where t.device_type = t6.device_type and t.event_code = t6.event_code
+				and t.parent_type = #{vo.parentType} and t.strategy_type >= 0  GROUP BY t6.device_id ) t1,
+       db_device_manager.t_manager_electric t2,db_device_manager.t_base_company t3
+        where t1.device_id = t2.device_id and t2.company_id=t3.id GROUP BY t2.company_id ORDER BY countx desc limit 20 ) t4,db_device_manager.t_base_company t3
+        where t4.company_id=t3.id ;
+    </select>
+
+    <select id="eventNumByDeviceSmoke"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+         select t2.create_time eventTime,t2.device_state,t2.device_state_name deviceStateName,t3.company_name,t1.countNum countNum,t2.building_name,t2.building_floor,t2.location,t2.device_id,t2.device_name,CONCAT(t2.building_name,t2.building_floor,t2.location) screenLocation  from
+      (select t6.device_id,sum(countx) countNum from (select t.device_id,t.event_code,t.device_type,count(*) countx from t_alarm_smoke t where
+      t.parent_type = #{vo.parentType} and t.create_time &gt;= #{vo.startTime}  and t.create_time &lt;= #{vo.endTime} group by t.event_code,t.device_type,t.device_id ) t6,t_strategy_alarm t where t.device_type = t6.device_type and t.event_code = t6.event_code
+      and t.parent_type =  #{vo.parentType} and t.strategy_type >= 0 GROUP BY t6.device_id order by countNum desc limit 20
+	  ) t1,db_device_manager.t_manager_smoke t2,db_device_manager.t_base_company t3
+      where t1.device_id = t2.device_id and t2.company_id=t3.id ;
+
+    </select>
+    <select id="eventNumByDeviceWaterpress"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+         select t2.create_time eventTime,t2.device_state,t2.device_state_name deviceStateName,t3.company_name,t1.countNum countNum,t2.building_name,t2.building_floor,t2.location,t2.device_id,t2.device_name,CONCAT(t2.building_name,t2.building_floor,t2.location) screenLocation  from
+          (select t6.device_id,sum(countx) countNum from (select t.device_id,t.event_code,t.device_type,count(*) countx from t_alarm_waterpress t where
+          t.parent_type = #{vo.parentType} and t.create_time &gt;= #{vo.startTime}  and t.create_time &lt;= #{vo.endTime} group by t.event_code,t.device_type,t.device_id ) t6,t_strategy_alarm t where t.device_type = t6.device_type and t.event_code = t6.event_code
+          and t.parent_type =  #{vo.parentType} and t.strategy_type >= 0 GROUP BY t6.device_id order by countNum desc limit 20
+          ) t1,db_device_manager.t_manager_waterpress t2,db_device_manager.t_base_company t3
+          where t1.device_id = t2.device_id and t2.company_id=t3.id ;
+    </select>
+    <select id="eventNumByDeviceElectric"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+			 select t2.create_time eventTime,t2.device_state,t2.device_state_name content, t1.event_code, t1.content deviceStateName,t3.company_name,t1.countx countNum,t2.building_name,t2.building_floor,t2.location,t2.device_id,t2.device_name,CONCAT(t2.building_name,t2.building_floor,t2.location) screenLocation  from
+      (select t6.device_id,t.event_code,t6.device_type,t.content,t6.countx from
+      ( select t.device_id,t.event_code,t.device_type,count(*) countx from t_alarm_electric t where t.parent_type = #{vo.parentType}
+        and t.create_time &gt;= #{vo.startTime}  and t.create_time &lt;= #{vo.endTime} group by t.event_code,t.device_type,t.device_id ) t6,t_strategy_alarm t where
+				 t.device_type = t6.device_type and t.event_code = t6.event_code and t.parent_type = #{vo.parentType} and t.strategy_type = #{vo.strategyType} order by countx desc limit 20
+		) t1,db_device_manager.t_manager_electric t2,db_device_manager.t_base_company t3
+      where t1.device_id = t2.device_id and t2.company_id=t3.id ;
+
+    </select>
+
+    <select id="eventNumByMonthSmoke"  resultType="com.smart.device.common.install.entity.vo.ScreenVo" parameterType="com.smart.device.common.install.entity.vo.ScreenVo" >
+        select t.strategy_type eventCode,sum(t2.countx) countNum from t_strategy_alarm t left join (
+        select t.event_code,t.device_type,count(*) countx from t_alarm_smoke t where t.parent_type = #{vo.parentType}
+        and t.create_time &gt;= #{vo.startTime} and t.create_time &lt;= #{vo.endTime}
+        group by t.event_code,t.device_type
+        ) t2 on t.device_type = t2.device_type and t.event_code = t2.event_code
+        where t.parent_type = #{vo.parentType} and t.strategy_type >= 0 GROUP BY t.strategy_type  ;
+    </select>
+    <select id="eventNumByMonthWaterpress"  resultType="com.smart.device.common.install.entity.vo.ScreenVo" parameterType="com.smart.device.common.install.entity.vo.ScreenVo" >
+        select t.strategy_type eventCode,sum(t2.countx) countNum from t_strategy_alarm t left join (
+        select t.event_code,t.device_type,count(*) countx from t_alarm_waterpress t where t.parent_type = #{vo.parentType}
+        and t.create_time &gt;= #{vo.startTime} and t.create_time &lt;= #{vo.endTime}
+        group by t.event_code,t.device_type
+        ) t2 on t.device_type = t2.device_type and t.event_code = t2.event_code
+        where t.parent_type = #{vo.parentType} and t.strategy_type >= 0 GROUP BY t.strategy_type  ;
+    </select>
+    <select id="eventNumByMonthElectric"  resultType="com.smart.device.common.install.entity.vo.ScreenVo" parameterType="com.smart.device.common.install.entity.vo.ScreenVo" >
+        select t.parent_event_code eventCode,t.content eventCodeName,sum(t2.countx) countNum from t_strategy_alarm t left join (
+        select t.event_code,t.device_type,count(*) countx from t_alarm_electric t where t.parent_type = #{vo.parentType}
+        and t.create_time &gt;= #{vo.startTime} and t.create_time &lt;= #{vo.endTime}
+        group by t.event_code,t.device_type
+        ) t2 on t.device_type = t2.device_type and t.event_code = t2.event_code
+        where t.parent_type = #{vo.parentType} and t.strategy_type >= 0 GROUP BY t.parent_event_code,t.content  ;
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.install.mapper.screen.DeviceInstallScreenMapper">
+
+    <select id="deviceStateSmoke"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+        select t1.dict_id device_state,t1.dict_name device_state_name,t2.countNum from t_base_dict t1 LEFT JOIN (select t.device_state,count(*) countNum
+        from t_manager_smoke t where t.parent_type = #{parentType}
+        group by t.device_state) t2 on t1.dict_id = t2.device_state
+		where t1.dict_type_id = 2 ;
+    </select>
+    <select id="deviceStateWaterpress"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+       select t1.dict_id device_state,t1.dict_name device_state_name,t2.countNum from t_base_dict t1 LEFT JOIN (select t.device_state,count(*) countNum
+        from t_manager_waterpress t where t.parent_type = #{parentType}
+        group by t.device_state) t2 on t1.dict_id = t2.device_state
+		where t1.dict_type_id = 2 ;
+    </select>
+    <select id="deviceStateElectric"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+        select t1.dict_id device_state,t1.dict_name device_state_name,t2.countNum from t_base_dict t1 LEFT JOIN (select t.device_state,count(*) countNum
+        from t_manager_electric t where t.parent_type = #{parentType}
+        group by t.device_state) t2 on t1.dict_id = t2.device_state
+		where t1.dict_type_id = 2 ;
+    </select>
+
+    <select id="deviceTypeSmoke"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+        select t1.device_type,t1.device_type_name,t2.countNum from db_device_basic.t_device_dict t1 LEFT JOIN (select t.device_type,count(*) countNum
+        from t_manager_smoke t where t.parent_type = #{parentType}
+        group by t.device_type) t2 on t1.device_type = t2.device_type
+		where t1.parent_type = #{parentType} and t1.status = 2;
+    </select>
+    <select id="deviceTypeWaterpress"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+       select t1.device_type,t1.device_type_name,t2.countNum from db_device_basic.t_device_dict t1 LEFT JOIN (select t.device_type,count(*) countNum
+        from t_manager_waterpress t where t.parent_type = #{parentType}
+        group by t.device_type) t2 on t1.device_type = t2.device_type
+		where t1.parent_type = #{parentType} and t1.status = 2;
+    </select>
+    <select id="deviceTypeElectric"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+        select t1.device_type,t1.device_type_name,t2.countNum from db_device_basic.t_device_dict t1 LEFT JOIN (select t.device_type,count(*) countNum
+        from t_manager_electric t where t.parent_type = #{parentType}
+        group by t.device_type) t2 on t1.device_type = t2.device_type
+		where t1.parent_type = #{parentType} and t1.status = 2;
+    </select>
+
+    <select id="deviceSmokeNumByCompany"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+        select  t2.company_id,count(*) countNum from t_manager_smoke t2,t_base_company t3
+        where t2.company_id=t3.id and t2.parent_type = #{parentType} GROUP BY t2.company_id ;
+    </select>
+    <select id="deviceWaterpressNumByCompany"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+        select  t2.company_id,count(*) countNum from t_manager_waterpress t2,t_base_company t3
+        where t2.company_id=t3.id and t2.parent_type = #{parentType} GROUP BY t2.company_id ;
+    </select>
+    <select id="deviceElectricNumByCompany"  resultType="com.smart.device.common.install.entity.vo.ScreenVo">
+        select  t2.company_id,count(*) countNum from t_manager_electric t2,t_base_company t3
+        where t2.company_id=t3.id and t2.parent_type = #{parentType} GROUP BY t2.company_id ;
+    </select>
+
+    <select id="deviceBuildCompanyElectric"  resultType="com.smart.device.common.install.entity.vo.ScreenVo" parameterType="com.smart.device.common.install.entity.vo.ScreenVo">
+        select  t2.device_state,t2.device_state_name,t3.company_name,t2.building_name,t2.building_floor,t2.location,t2.device_id,t2.device_name,CONCAT(t2.building_name,t2.building_floor,t2.location,t2.device_name) screenLocation	from
+        t_manager_electric t2,t_base_company t3
+        where t2.company_id=t3.id and t2.device_state = #{vo.deviceState} and t2.parent_type = #{vo.parentType}
+    </select>
+
+
+
+</mapper>

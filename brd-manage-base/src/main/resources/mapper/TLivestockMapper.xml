@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TLivestockMapper">
+
+
+    <select id="tLivestockList" parameterType="com.smart.brd.manage.base.entity.vo.LiveStockVo" resultType="com.smart.brd.manage.base.entity.vo.LiveStockVo">
+        SELECT t.*,
+        (select temperature from t_heart_device where device_code = t.device_code and delete_flag = 0 order by create_time desc limit 1) as heat
+        from t_livestock t
+        where t.delete_flag = 0
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        <if test="vo.suitable != null and vo.suitable != '' ">
+            and t.suitable = #{vo.suitable}
+        </if>
+        <if test="vo.idList != null and vo.idList != '' ">
+            and t.bed_id in (${vo.idList})
+        </if>
+        <if test="vo.shedId != null and vo.shedId != '' ">
+            and t.shed_id = #{vo.shedId}
+        </if>
+        <if test="vo.bedId != null and vo.bedId != '' ">
+            and t.bed_id = #{vo.bedId}
+        </if>
+        <if test="vo.startTime != null and vo.startTime != '' ">
+            and t.entry_date &gt;= #{vo.startTime}
+        </if>
+        <if test="vo.endTime != null and vo.endTime != '' ">
+            and t.entry_date &lt;= #{vo.endTime}
+        </if>
+        <if test="vo.status != null and vo.status !='' ">
+            and t.status = #{vo.status}
+        </if>
+        <if test="vo.suitables != null and vo.suitables != '' ">
+            and t.suitable in (${vo.suitables})
+        </if>
+        ORDER BY t.entry_date desc
+    </select>
+
+    <select id="queryLivestockList" parameterType="com.smart.brd.manage.base.entity.vo.LiveStockVo" resultType="com.smart.brd.manage.base.entity.vo.LiveStockVo">
+        SELECT * from t_livestock t where t.delete_flag = 0
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        <if test="vo.deviceCode != null ">
+            and t.device_code like concat('%',#{vo.deviceCode},'%')
+        </if>
+        <if test="vo.status != null ">
+            and t.status = #{vo.status}
+        </if>
+        <!--limit 20--><!--耳标列表全部显示-->
+    </select>
+    <select id="queryById" resultType="com.smart.brd.manage.base.entity.TLivestock">
+        select * from t_livestock t where t.delete_flag = 0 and t.livestock_id = #{id}
+    </select>
+
+    <select id="preTransferList" parameterType="com.smart.brd.manage.base.entity.vo.LiveStockVo" resultType="com.smart.brd.manage.base.entity.TLivestock">
+        SELECT * from t_livestock t where t.transfer_type = 0
+        <if test="vo.suitable != null and vo.suitable != '' ">
+            and t.suitable = #{vo.suitable}
+        </if>
+        <if test="vo.preListingDate != null ">
+            and t.pre_listing_date &lt; #{vo.preListingDate}
+        </if>
+    </select>
+
+    <select id="suitableList" parameterType="com.smart.brd.manage.base.entity.vo.LiveStockVo" resultType="com.smart.brd.manage.base.entity.TLivestock">
+        SELECT * from t_livestock t where t.delete_flag = 0
+        <if test="vo.suitable != null and vo.suitable != '' ">
+            and t.suitable = #{vo.suitable}
+        </if>
+        <if test="vo.groupTransferDate != null ">
+            and t.group_transfer_date = #{vo.groupTransferDate}
+        </if>
+    </select>
+
+    <select id="preListingdateNull" parameterType="java.lang.Long" >
+        update t_livestock set group_transfer_date = null where livestock_id = #{livestockId}
+    </select>
+
+</mapper>

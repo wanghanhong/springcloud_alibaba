@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.card.manage.mapper.TCardProductMapper">
+
+
+    <select id="tCardProductList" parameterType="com.smart.card.manage.entity.TCardProduct" resultType="com.smart.card.manage.entity.TCardProduct">
+        SELECT * from t_card_product t where t.delete_flag = 0
+        <if test="vo.iccid != null ">
+            and t.iccid = #{vo.iccid}
+        </if>
+        <if test="vo.msisdn != null ">
+            and t.msisdn = #{vo.msisdn}
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+
+
+</mapper>

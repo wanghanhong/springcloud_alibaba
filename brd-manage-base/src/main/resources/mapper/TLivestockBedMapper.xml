@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.brd.manage.base.mapper.TLivestockBedMapper">
+
+
+    <select id="tLivestockBedList" parameterType="com.smart.brd.manage.base.entity.BarnsVo" resultType="com.smart.brd.manage.base.entity.BarnsVo">
+        SELECT
+        t.* ,t1.shed_name,t2.field_name as fieldName
+        FROM
+        t_livestock_bed t
+        LEFT JOIN t_livestock_shed t1 on t.shed_id=t1.shed_id
+        LEFT JOIN t_brd_field t2 on t1.field_id=t2.field_id
+        where t.delete_flag = 0
+        <if test="vo.fieldName != null and vo.fieldName != '' ">
+            and t2.field_name like concat('%',#{vo.fieldName},'%')
+        </if>
+        <if test="vo.bedName != null and vo.bedName != '' ">
+            and t.bed_name like concat('%',#{vo.bedName},'%')
+        </if>
+        <if test="vo.type != null and vo.type != '' ">
+            and t.type = #{vo.type}
+        </if>
+        <if test="vo.shedName != null and vo.shedName != '' ">
+            and t1.shed_name like concat('%',#{vo.shedName},'%')
+        </if>
+        <if test="vo.shedId != null ">
+            and t.shed_id = #{vo.shedId}
+        </if>
+        <if test="vo.bedId != null ">
+            and t.bed_id = #{vo.bedId}
+        </if>
+        <if test="vo.capacity != null and vo.capacity != '' ">
+            and t.capacity = #{vo.capacity}
+        </if>
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and t.dept_id in (${vo.deptIds})
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+    <select id="queryBreederList" resultType="com.smart.brd.manage.base.entity.vo.TLivestockBedVo">
+        select username,mobile from brd_sys.t_user
+        where is_show = 1
+        <if test="vo.deptIds != null and vo.deptIds != '' ">
+            and dept_id in (${vo.deptIds})
+        </if>
+    </select>
+
+
+</mapper>
