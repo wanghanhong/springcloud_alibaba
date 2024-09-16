@@ -1,47 +1,0 @@
-
-8
-java:S1643ò"Use a StringBuilder instead.(ÄÕàÓÿÿÿÿÿ
-w
-java:S3012¢"YUse "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.(ÄŞáñ8”¥ê®”/
-9
-java:S1643]"Use a StringBuilder instead.(üôçì8”¥ê®”/
-X	java:S125"<This block of commented-out lines of code should be removed.(ğìÃ	8”¥ê®”/
-3
-java:S1643ï"Use a StringBuilder instead.(­î¶í
-9
-java:S1643V"Use a StringBuilder instead.(­“Áİ8”¥ê®”/
-c
-java:S1128"MRemove this unused import 'com.baomidou.mybatisplus.core.conditions.Wrapper'.(ÛÑĞ£
-Q	java:S125‚"<This block of commented-out lines of code should be removed.(©»ùz
-9
-java:S1643X"Use a StringBuilder instead.(Ôúìó8”¥ê®”/
-:
-java:S1643‰"Use a StringBuilder instead.(­“Áİ8”¥ê®”/
-K
-java:S1125È"(Remove the literal "true" boolean value.(œåˆúÿÿÿÿ8”¥ê®”/
-t
-java:S3776F"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(„í¤ùÿÿÿÿ8”¥ê®”/
-L
-java:S5411J"*Use the primitive boolean expression here.(´Ñë§şÿÿÿÿ8”¥ê®”/
-?
-java:S1643ğ"Use a StringBuilder instead.(â•¤±ûÿÿÿÿ8”¥ê®”/
-^	java:S125¥"<This block of commented-out lines of code should be removed.(ôø¶ãüÿÿÿÿ8”¥ê®”/
-X	java:S125q"<This block of commented-out lines of code should be removed.(‹ßŒã8”¥ê®”/
-a
-java:S1155È">Use isEmpty() to check whether the collection is empty or not.(œåˆúÿÿÿÿ8”¥ê®”/
-?
-java:S1643ó"Use a StringBuilder instead.(Ñû·÷øÿÿÿÿ8”¥ê®”/
-:
-java:S1643"Use a StringBuilder instead.(üôçì8”¥ê®”/
-9
-java:S1643_"Use a StringBuilder instead.(Íø”±8”¥ê®”/
-K
-java:S1128 "0Remove this unused import 'java.time.LocalDate'.(›‘¬èıÿÿÿÿ
-^	java:S125³"<This block of commented-out lines of code should be removed.(¢±Öºûÿÿÿÿ8”¥ê®”/
-:
-java:S1643‹"Use a StringBuilder instead.(Ôúìó8”¥ê®”/
-:
-java:S1643’"Use a StringBuilder instead.(Íø”±8”¥ê®”/
-R
-java:S1481ÿ"/Remove this unused "bigDecimal" local variable.(¿›áÈüÿÿÿÿ8”¥ê®”/
-X	java:S125i"<This block of commented-out lines of code should be removed.(È¤ìë8”¥ê®”/

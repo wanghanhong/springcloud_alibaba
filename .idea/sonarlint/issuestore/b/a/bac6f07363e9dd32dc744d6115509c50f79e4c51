@@ -1,8 +1,0 @@
-
-]
-java:S1128"GRemove this unused import 'com.smart.brd.manage.base.entity.TBrdField'.(¹œË
-W	java:S125„"<This block of commented-out lines of code should be removed.(îŸ†ÿÿÿÿÿ
-f
-java:S1128"KRemove this unused import 'com.smart.brd.manage.base.entity.vo.BrdFieldVo'.(…¬öŒıÿÿÿÿ
-r
-java:S1488™"[Immediately return this expression instead of assigning it to the temporary variable "res".(ÑÚ¥

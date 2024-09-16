@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.smart.device.install.mapper.screen.WholeProvinceMapper">
+
+    <select id="deviceSmokeNum"  resultType="com.smart.device.common.install.entity.vo.ScreenProvinceVo">
+        select t.parent_type,t1.city,concat(t.parent_type,t1.city) as cpk,group_concat(t.device_id) ids,count(*) countNum
+        from t_manager_smoke t,t_base_building t1
+        where t.building_id = t1.id and t.parent_type = #{parentType} group by t1.city,t.parent_type ;
+    </select>
+    <select id="deviceWaterpressNum"  resultType="com.smart.device.common.install.entity.vo.ScreenProvinceVo">
+        select t.parent_type,t1.city,concat(t.parent_type,t1.city) as cpk,group_concat(t.device_id) ids,count(*) countNum
+        from t_manager_waterpress t,t_base_building t1
+        where t.building_id = t1.id and t.parent_type = #{parentType} group by t1.city,t.parent_type ;
+    </select>
+    <select id="deviceElectricNum"  resultType="com.smart.device.common.install.entity.vo.ScreenProvinceVo">
+        select t.parent_type,t1.city,concat(t.parent_type,t1.city) as cpk,group_concat(t.device_id) ids,count(*) countNum
+        from t_manager_electric t,t_base_building t1
+        where t.building_id = t1.id and t.parent_type = #{parentType} group by t1.city,t.parent_type ;
+    </select>
+
+    <select id="deviceSmokeAll"  resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+        SELECT count(*) countNum from t_manager_smoke t where t.parent_type = #{parentType} group by t.parent_type ;
+    </select>
+    <select id="deviceWaterpressAll"  resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+        SELECT count(*) countNum from t_manager_waterpress t where t.parent_type = #{parentType} group by t.parent_type ;
+    </select>
+    <select id="deviceElectricAll"  resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+        SELECT count(*) countNum from t_manager_electric t where t.parent_type = #{parentType} group by t.parent_type ;
+    </select>
+
+    <select id="companyAll"  resultType="java.lang.Integer" >
+        SELECT count(*) countNum from t_base_company t ;
+    </select>
+    <select id="fireCompanyAll"  resultType="java.lang.Integer" >
+        SELECT count(*) countNum from t_base_company t where type =1 ;
+    </select>
+
+
+</mapper>
+

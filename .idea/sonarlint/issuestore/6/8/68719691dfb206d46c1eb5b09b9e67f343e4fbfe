@@ -1,14 +1,0 @@
-
-S	java:S106""9Replace this use of System.out or System.err by a logger.(‰…çıÿÿÿÿ
-f	java:S117
-"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¨ø¯¯
-U
-java:S1118":Add a private constructor to hide the implicit public one.(¿ˆù¡ÿÿÿÿÿ
-?
-java:S1905
-")Remove this unnecessary cast to "double".(¨ø¯¯
-2
-java:S1643 "Use a StringBuilder instead.(Ä¡œ‘
-m	java:S127"XRefactor the code in order to not assign to this loop counter from within the loop body.(Â¨•ù
-D
-java:S2140")Use "java.util.Random.nextInt()" instead.(¸¨«õúÿÿÿÿ

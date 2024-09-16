@@ -1,38 +1,0 @@
-
-^	java:S125´"<This block of commented-out lines of code should be removed.(ÁÄà¶ıÿÿÿÿ8¼½Ÿ¢•/
-f
-java:S3252Ÿ"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(Áû†ä
-j
-java:S3252I"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(›¶Íéùÿÿÿÿ
-o	java:S135ß"YReduce the total number of break and continue statements in this loop to use at most one.(¯ø›
-j
-java:S3252F"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(Ø¯úÿÿÿÿ
-j
-java:S3252~"OUse static access with "org.apache.commons.lang3.StringUtils" for "isNotBlank".(ãÛˆŸÿÿÿÿÿ
-N
-java:S1854•"7Remove this useless assignment to local variable "msg".(Ë—ó©
-p
-java:S3776Ü"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(»”äù8ºÌ¸¡•/
-i
-java:S3252«"RUse static access with "org.springframework.beans.BeanUtils" for "copyProperties".(›³”‚
-^	java:S125ù"<This block of commented-out lines of code should be removed.(˜¤Â„ıÿÿÿÿ8ÊËõ©•/
-h
-java:S3252f"RUse static access with "org.springframework.beans.BeanUtils" for "copyProperties".(›³”‚
-?
-java:S1643í"Use a StringBuilder instead.(ç¶¨ªıÿÿÿÿ8¾˜Öï•/
-?
-java:S1643ô"Use a StringBuilder instead.(ÿäñÙşÿÿÿÿ8¾˜Öï•/
-?
-java:S1643ú"Use a StringBuilder instead.(ıøõ€øÿÿÿÿ8¾˜Öï•/
-?
-java:S1643ş"Use a StringBuilder instead.(ß„ùÔøÿÿÿÿ8¾˜Öï•/
-?
-java:S1643‚"Use a StringBuilder instead.(  ëÕıÿÿÿÿ8¾˜Öï•/
-?
-java:S1643†"Use a StringBuilder instead.(õ‡ºıüÿÿÿÿ8¾˜Öï•/
-:
-java:S1643Š"Use a StringBuilder instead.(á´í8¾˜Öï•/
-:
-java:S1643•"Use a StringBuilder instead.(Ë—ó©8¾˜Öï•/
-?
-java:S1643œ"Use a StringBuilder instead.(àÁâøÿÿÿÿ8¾˜Öï•/

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.install.mapper.monitor.SdDeviceMonitorMapper">
+
+
+    <select id="selectCompanys" resultType="com.smart.device.common.install.entity.vo.DeviceMonitorVo" parameterType="com.smart.device.common.install.entity.vo.DeviceMonitorVo">
+        select id companyId,company_name companyName from t_base_company t where t.delete_flag = 0
+            <if test="vo.companyId != null  ">
+                and t.id = #{vo.companyId}
+            </if>
+            <if test="vo.province != null and vo.province != ''">
+                and t.province = #{vo.province}
+            </if>
+            <if test="vo.city != null and vo.city != ''">
+                and t.city = #{vo.city}
+            </if>
+            <if test="vo.county != null and vo.county != ''">
+                and t.county = #{vo.county}
+            </if>
+            <if test="vo.town != null and vo.town != ''">
+                and t.town = #{vo.town}
+            </if>
+        ORDER BY t.id desc
+    </select>
+    <select id="queryBuildNumByCompanyId" resultType="java.lang.Integer" >
+            select count(*) countNum from t_base_building t where t.company_id = #{vo.companyId} ;
+    </select>
+    <select id="queryBuildingSonDeviceNum" resultType="java.lang.Integer" >
+     select sum(t1.fire_all_num) countNum from t_base_building_son t1,t_base_building t where t.id = t1.building_id and t.company_id = #{vo.companyId} ;
+	</select>
+    <select id="queryDealNum" resultType="java.lang.Integer" >
+          select count(*) countNum from db_device_message.t_alarm_smoke a,t_manager_smoke t,t_base_building b,db_device_message.t_strategy_alarm s
+          where a.device_id=t.device_id and t.building_id=b.id and b.company_id = #{vo.companyId}
+          and a.device_type=s.device_type and a.event_code = s.event_code and s.strategy_type >= 0 and a.state = 0 ;
+
+    </select>
+    <select id="deviceAlarmsList" resultType="com.smart.device.common.install.entity.vo.DeviceMonitorVo"
+            parameterType="com.smart.device.common.install.entity.vo.DeviceMonitorVo">
+        select t.device_id,t.imei,t.device_name,t.parent_type,a.create_time,a.event_code,s.content,b.building_name,t.building_floor,t.location,a.state
+        from db_device_message.t_alarm_smoke a,t_manager_smoke t,t_base_building b,db_device_message.t_strategy_alarm s
+        where a.device_id=t.device_id and t.building_id=b.id and b.company_id = #{vo.companyId}
+        and a.device_type=s.device_type and a.event_code = s.event_code and s.strategy_type >= 0
+        <if test="vo.state != null ">
+            and a.state = #{vo.state}
+        </if>
+        ORDER BY a.create_time asc
+    </select>
+
+
+</mapper>

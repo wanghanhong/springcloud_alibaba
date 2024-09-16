@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.message.data.mapper.TAlarmElectricMapper">
+
+    <select id="alarmElectricList" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo" resultType="com.smart.device.common.message.vo.AlarmVo">
+        select t.device_id,t.parent_type,t.device_type,t.device_type_name,t.device_name,t.device_code,t.event_code,t.event_time,t.state,t.state_name,t1.company_id,t1.company_name,t1.building_id,t1.building_name,t1.location,t.content,i.incharge_name inchargeName,i.incharge_phone inchargePhone,i.manager_name managerName,i.manager_phone managerPhone,i.parttime_name parttimeName,i.parttime_phone parttimePhone
+        ,t1.longitude,t1.latitude,t1.province,t1.city,t1.county,t1.town,t1.housing,t1.device_state_name
+        from t_alarm_electric t,db_device_manager.t_manager_electric t1,db_device_manager.t_base_company i
+        where t.device_id=t1.device_id and t1.company_id=i.id
+        <if test="vo.deviceType != null ">
+            and t.parent_type = #{vo.deviceType}
+        </if>
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.opUserId != null ">
+            and t1.op_user_id = #{vo.opUserId}
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+    <select id="alarmElectricListUser" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo" resultType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+        select t.device_id,t.parent_type,t.device_type,t.device_type_name,t.device_name,t.device_code,t.event_code,t.event_time,t.state,t.state_name,t1.company_id,t1.company_name,t1.building_id,t1.building_name,t1.location,t.content,u.username,u.mobile phone
+        ,t1.longitude,t1.latitude,t1.province,t1.city,t1.county,t1.town,t1.housing,t1.device_state_name
+        from t_alarm_electric t,db_device_manager.t_manager_electric t1,iot2.t_user u
+        where t.device_id=t1.device_id and t1.op_user_id=u.user_id
+        <if test="vo.deviceType != null ">
+            and t.parent_type = #{vo.deviceType}
+        </if>
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.opUserId != null ">
+            and t1.op_user_id = #{vo.opUserId}
+        </if>
+        ORDER BY t.create_time desc
+    </select>
+
+    <update id="updateAlarmEelectric" parameterType="com.smart.device.common.install.entity.vo.DeviceMonitorVo" >
+        update t_alarm_electric
+        <set>
+            <if test="vo.state != null ">
+                state = #{vo.state},
+            </if>
+            <if test="vo.stateName != null ">
+                state_name = #{vo.stateName},
+            </if>
+            <if test="vo.result != null ">
+                result = #{vo.result},
+            </if>
+            <if test="vo.createTime != null ">
+                deal_time = #{vo.createTime},
+            </if>
+        </set>
+        where device_id = #{vo.deviceId} and ( state = 0 or state = 1 or state = 2 )
+    </update>
+
+    <select id="getLastEelectricAlarm" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo" resultType="com.smart.device.common.message.vo.AlarmVo">
+        select t.device_id,t.parent_type,t.device_type,t.device_type_name,t.device_name,t.device_code,t.event_code,t.event_time,t.state,t.state_name,t.content
+        from t_alarm_electric t
+        <where>
+            <if test="vo.deviceId != null ">
+                and t.device_id = #{vo.deviceId}
+            </if>
+        </where>
+        limit 1 ;
+    </select>
+
+
+</mapper>

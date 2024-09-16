@@ -1,0 +1,753 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.message.data.mapper.screen.ScreenMapper">
+
+
+    <select id="internetDept" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo" resultType="java.util.Map" >
+        SELECT  type,count(type) num  from db_device_manager.t_base_company t
+        <where>
+            <if test="vo.companyId != null ">
+                and t.id = #{vo.companyId}
+            </if>
+            <if test="vo.province != null and vo.province != ''">
+                and t.province = #{vo.province}
+            </if>
+            <if test="vo.city != null and vo.city != ''">
+                and t.city = #{vo.city}
+            </if>
+            <if test="vo.county != null and vo.county != ''">
+                and t.county = #{vo.county}
+            </if>
+            <if test="vo.town != null and vo.town != ''">
+                and t.town = #{vo.town}
+            </if>
+        </where>
+        GROUP BY type
+    </select>
+    
+    <select id="deviceNewAlarmDay" resultType="java.util.Map" >
+        SELECT time, count(time) num from (SELECT DATE_FORMAT(ta.event_time, '%Y-%m-%d %H') time from (
+        SELECT a.event_time from db_device_message.t_alarm_smoke a,db_device_manager.t_manager_smoke t1,db_device_manager.t_base_building d where DATE_FORMAT(a.event_time, '%Y-%m-%d') = #{vo.today} and a.device_id = t1.device_id and t1.building_id = d.id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT a.event_time from db_device_message.t_alarm_waterpress a,db_device_manager.t_manager_waterpress t1,db_device_manager.t_base_building d where DATE_FORMAT(a.event_time, '%Y-%m-%d') = #{vo.today} and a.device_id = t1.device_id and t1.building_id = d.id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT a.event_time from db_device_message.t_alarm_electric a,db_device_manager.t_manager_electric t1,db_device_manager.t_base_building d where DATE_FORMAT(a.event_time, '%Y-%m-%d') = #{vo.today} and a.device_id = t1.device_id and t1.building_id = d.id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        ) ta
+        ) t GROUP BY time ORDER BY time asc ;
+    </select>
+
+
+    <select id="deviceAlarmTotal" resultType="java.util.Map" >
+        SELECT time, count(time) num from (SELECT DATE_FORMAT(ta.event_time, '%H') time from (
+        SELECT a.event_time from db_device_message.t_alarm_smoke a,db_device_manager.t_manager_smoke t1,db_device_manager.t_base_building d where
+        a.event_time  &lt;= #{vo.dayEnd} and a.event_time  >= #{vo.dayStart} and a.device_id = t1.device_id and t1.building_id = d.id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT a.event_time from db_device_message.t_alarm_waterpress a,db_device_manager.t_manager_waterpress t1,db_device_manager.t_base_building d where
+        a.event_time  &lt;= #{vo.dayEnd} and a.event_time  >= #{vo.dayStart}  and a.device_id = t1.device_id and t1.building_id = d.id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT a.event_time from db_device_message.t_alarm_electric a,db_device_manager.t_manager_electric t1,db_device_manager.t_base_building d where
+        a.event_time  &lt;= #{vo.dayEnd} and a.event_time  >= #{vo.dayStart} and a.device_id = t1.device_id and t1.building_id = d.id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        ) ta
+        ) t GROUP BY time ORDER BY time asc ;
+    </select>
+
+
+    <select id="alarmState" resultType="java.util.Map" >
+        SELECT  t1.state,count(t1.state) num  from (
+        SELECT t.state from db_device_message.t_alarm_smoke t,db_device_manager.t_manager_smoke t1 where t.state = 0 and
+        t.device_id=t1.device_id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and t1.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and t1.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and t1.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and t1.town = #{vo.town}
+        </if>
+        union all
+        SELECT t.state from db_device_message.t_alarm_waterpress t ,db_device_manager.t_manager_waterpress t1 where t.state = 0 and
+        t.device_id=t1.device_id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and t1.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and t1.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and t1.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and t1.town = #{vo.town}
+        </if>
+        union all
+        SELECT t.state from db_device_message.t_alarm_electric t ,db_device_manager.t_manager_electric t1 where t.state = 0 and
+        t.device_id=t1.device_id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and t1.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and t1.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and t1.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and t1.town = #{vo.town}
+        </if>
+        ) t1 GROUP BY t1.state ;
+    </select>
+
+    <select id="deviceAlarmDay" resultType="java.util.Map" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+        SELECT count(ta.id) alarmNum
+        from  ( SELECT a.* from db_device_message.t_alarm_smoke a,db_device_manager.t_manager_smoke t1,db_device_manager.t_base_building d where
+        a.state = 0 and a.device_id = t1.device_id and t1.building_id = d.id
+        <if test="vo.today != null ">
+            and DATE_FORMAT(a.event_time, '%Y-%m-%d') = #{vo.today}
+        </if>
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.opUserId != null ">
+            and t1.op_user_id = #{vo.opUserId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT a.* from db_device_message.t_alarm_waterpress a,db_device_manager.t_manager_waterpress t1,db_device_manager.t_base_building d where
+        a.state = 0 and  a.device_id = t1.device_id and t1.building_id = d.id
+        <if test="vo.today != null ">
+            and DATE_FORMAT(a.event_time, '%Y-%m-%d') = #{vo.today}
+        </if>
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.opUserId != null ">
+            and t1.op_user_id = #{vo.opUserId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT a.* from db_device_message.t_alarm_electric a,db_device_manager.t_manager_electric t1,db_device_manager.t_base_building d where
+        a.state = 0 and  a.device_id = t1.device_id and t1.building_id = d.id
+        <if test="vo.today != null ">
+            and DATE_FORMAT(a.event_time, '%Y-%m-%d') = #{vo.today}
+        </if>
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.opUserId != null ">
+            and t1.op_user_id = #{vo.opUserId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        ) ta ;
+     </select>
+
+
+    <select id="deviceDeptDay" resultType="java.util.Map" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+        SELECT count(id) deptNum from  db_device_manager.t_base_company t
+        <where>
+            <if test="vo.companyId != null ">
+                and t.id = #{vo.companyId}
+            </if>
+            <if test="vo.province != null and vo.province != ''">
+                and t.province = #{vo.province}
+            </if>
+            <if test="vo.city != null and vo.city != ''">
+                and t.city = #{vo.city}
+            </if>
+            <if test="vo.county != null and vo.county != ''">
+                and t.county = #{vo.county}
+            </if>
+            <if test="vo.town != null and vo.town != ''">
+                and t.town = #{vo.town}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="deviceNumDay" resultType="java.util.Map" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+        SELECT count(ta.id) deviceNum
+        from  (
+        SELECT t1.id from db_device_manager.t_manager_smoke t1,db_device_manager.t_base_building d where t1.building_id = d.id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.opUserId != null ">
+            and t1.op_user_id = #{vo.opUserId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT t1.id from db_device_manager.t_manager_waterpress t1,db_device_manager.t_base_building d where t1.building_id = d.id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.opUserId != null ">
+            and t1.op_user_id = #{vo.opUserId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT t1.id from db_device_manager.t_manager_electric t1,db_device_manager.t_base_building d where t1.building_id = d.id
+        <if test="vo.companyId != null ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.opUserId != null ">
+            and t1.op_user_id = #{vo.opUserId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        ) ta
+    </select>
+
+    <select id="alarmDeptDay" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo" resultType="java.util.Map" >
+        select deptName name,count(deptId) num from (
+        SELECT d.company_id deptId,c.company_name deptName from db_device_message.t_alarm_smoke a,db_device_manager.t_manager_smoke t1,db_device_manager.t_base_building d,db_device_manager.t_base_company c
+        where a.state = 0 and a.device_id = t1.device_id and t1.building_id = d.id and d.company_id = c.id
+        <if test="vo.companyId != null ">
+            and d.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT d.company_id deptId,c.company_name deptName from db_device_message.t_alarm_waterpress a,db_device_manager.t_manager_waterpress t1,db_device_manager.t_base_building d ,db_device_manager.t_base_company c
+        where  a.state = 0 and a.device_id = t1.device_id and t1.building_id = d.id and d.company_id = c.id
+        <if test="vo.companyId != null ">
+            and d.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT d.company_id deptId,c.company_name deptName from db_device_message.t_alarm_electric a,db_device_manager.t_manager_electric t1,db_device_manager.t_base_building d ,db_device_manager.t_base_company c
+        where  a.state = 0 and a.device_id = t1.device_id and t1.building_id = d.id and d.company_id = c.id
+        <if test="vo.companyId != null ">
+            and d.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        ) ta GROUP BY deptId,deptName ORDER BY num asc
+
+    </select>
+
+    <select id="voiceCall" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo" resultType="java.util.Map">
+        select
+        CONCAT(CAST(round((num/(num+num1))*100,2) AS CHAR)) as resData
+        from
+        (SELECT count(v.state) num  from iot2.sd_device_voice v,iot2.sd_device d
+         where v.state = 1 and v.device_id = d.id
+         ) t1,
+        (SELECT count(v.state) num1  from iot2.sd_device_voice v,iot2.sd_device d
+         where v.state = 0 and v.device_id = d.id
+         ) t2
+    </select>
+
+    <select id="deviceNewDay" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo" resultType="java.util.Map" >
+        SELECT time, count(time) num from (SELECT DATE_FORMAT(ta.create_time, '%Y-%m') time from
+        (
+        SELECT t1.create_time from db_device_manager.t_manager_smoke t1,db_device_manager.t_base_building d where
+        t1.create_time >= #{vo.today} and t1.building_id = d.id
+            <if test="vo.companyId != null ">
+                and t1.company_id = #{vo.companyId}
+            </if>
+            <if test="vo.province != null and vo.province != ''">
+                and d.province = #{vo.province}
+            </if>
+            <if test="vo.city != null and vo.city != ''">
+                and d.city = #{vo.city}
+            </if>
+            <if test="vo.county != null and vo.county != ''">
+                and d.county = #{vo.county}
+            </if>
+            <if test="vo.town != null and vo.town != ''">
+                and d.town = #{vo.town}
+            </if>
+        union all
+        SELECT t1.create_time from db_device_manager.t_manager_waterpress t1,db_device_manager.t_base_building d where
+        t1.create_time >= #{vo.today} and t1.building_id = d.id
+            <if test="vo.companyId != null ">
+                and t1.company_id = #{vo.companyId}
+            </if>
+            <if test="vo.province != null and vo.province != ''">
+                and d.province = #{vo.province}
+            </if>
+            <if test="vo.city != null and vo.city != ''">
+                and d.city = #{vo.city}
+            </if>
+            <if test="vo.county != null and vo.county != ''">
+                and d.county = #{vo.county}
+            </if>
+            <if test="vo.town != null and vo.town != ''">
+                and d.town = #{vo.town}
+            </if>
+        union all
+        SELECT t1.create_time from db_device_manager.t_manager_electric t1,db_device_manager.t_base_building d where
+        t1.create_time >= #{vo.today} and t1.building_id = d.id
+            <if test="vo.companyId != null ">
+                and t1.company_id = #{vo.companyId}
+            </if>
+            <if test="vo.province != null and vo.province != ''">
+                and d.province = #{vo.province}
+            </if>
+            <if test="vo.city != null and vo.city != ''">
+                and d.city = #{vo.city}
+            </if>
+            <if test="vo.county != null and vo.county != ''">
+                and d.county = #{vo.county}
+            </if>
+            <if test="vo.town != null and vo.town != ''">
+                and d.town = #{vo.town}
+            </if>
+        ) ta ) t GROUP BY time ORDER BY time asc ;
+    </select>
+
+    <select id="deptInfoDay" resultType="com.smart.device.common.install.entity.vo.DeviceCompanyVo" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+        SELECT company_name companyName from  db_device_manager.t_base_company t
+        <where>
+            <if test="vo.companyId != null ">
+                and t.id = #{vo.companyId}
+            </if>
+            <if test="vo.province != null and vo.province != ''">
+                and t.province = #{vo.province}
+            </if>
+            <if test="vo.city != null and vo.city != ''">
+                and t.city = #{vo.city}
+            </if>
+            <if test="vo.county != null and vo.county != ''">
+                and t.county = #{vo.county}
+            </if>
+            <if test="vo.town != null and vo.town != ''">
+                and t.town = #{vo.town}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="deptStateList" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo" resultType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+        select * from (select * from ( select t1.imei,t1.parent_type,t1.device_state_name,t1.company_name,d.province,d.city,d.county,d.longitude,d.latitude,a.create_time,a.state,a.content,t1.device_code deviceCode,t1.location,t1.building_floor buildingFloor,t1.building_id buildingId,d.building_name buildingName,c.company_name deptName,c.address deptAddress,c.establish_time establishmentTime, c.incharge_name inchargeName,c.incharge_phone inchargePhone,c.manager_name managerName,c.manager_phone managerPhone,c.parttime_name parttimeName,c.parttime_phone parttimePhone,c.supervision_level supervisionLevel, c.monitor_center_name belongsto from
+         db_device_message.t_alarm_smoke a,db_device_manager.t_manager_smoke t1,db_device_manager.t_base_building d,db_device_manager.t_base_company c where  a.device_id = t1.device_id and t1.building_id = d.id and d.company_id = c.id and a.state = 0
+            <if test="vo.companyId != null ">
+                and d.company_id = #{vo.companyId}
+            </if>
+            <if test="vo.province != null and vo.province != ''">
+                and d.province = #{vo.province}
+            </if>
+            <if test="vo.city != null and vo.city != ''">
+                and d.city = #{vo.city}
+            </if>
+            <if test="vo.county != null and vo.county != ''">
+                and d.county = #{vo.county}
+            </if>
+            <if test="vo.town != null and vo.town != ''">
+                and d.town = #{vo.town}
+            </if>
+        ORDER BY a.create_time DESC limit 100 ) t1
+         union all
+          select * from ( select t1.imei,t1.parent_type,t1.device_state_name,t1.company_name,d.province,d.city,d.county,d.longitude,d.latitude,a.create_time,a.state,a.content,t1.device_code deviceCode,t1.location,t1.building_floor buildingFloor,t1.building_id buildingId,d.building_name buildingName,c.company_name deptName,c.address deptAddress,c.establish_time establishmentTime, c.incharge_name inchargeName,c.incharge_phone inchargePhone,c.manager_name managerName,c.manager_phone managerPhone,c.parttime_name parttimeName,c.parttime_phone parttimePhone,c.supervision_level supervisionLevel, c.monitor_center_name belongsto from
+         db_device_message.t_alarm_waterpress a,db_device_manager.t_manager_waterpress t1,db_device_manager.t_base_building d,db_device_manager.t_base_company c where  a.device_id = t1.device_id and t1.building_id = d.id and d.company_id = c.id and a.state = 0
+        <if test="vo.companyId != null ">
+            and d.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        ORDER BY a.create_time DESC limit 100 ) t2
+         union all
+         select * from (select t1.imei,t1.parent_type,t1.device_state_name,t1.company_name,d.province,d.city,d.county,d.longitude,d.latitude,a.create_time,a.state,a.content,t1.device_code deviceCode,t1.location,t1.building_floor buildingFloor,t1.building_id buildingId,d.building_name buildingName,c.company_name deptName,c.address deptAddress,c.establish_time establishmentTime, c.incharge_name inchargeName,c.incharge_phone inchargePhone,c.manager_name managerName,c.manager_phone managerPhone,c.parttime_name parttimeName,c.parttime_phone parttimePhone,c.supervision_level supervisionLevel, c.monitor_center_name belongsto from
+         db_device_message.t_alarm_electric a,db_device_manager.t_manager_electric t1,db_device_manager.t_base_building d,db_device_manager.t_base_company c where  a.device_id = t1.device_id and t1.building_id = d.id and d.company_id = c.id and a.state = 0
+        <if test="vo.companyId != null ">
+            and d.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        ORDER BY a.create_time DESC limit 100 ) t3  ) ta ORDER BY ta.create_time desc ;
+    </select>
+
+    <select id="deviceInfoDay" resultType="com.smart.device.common.install.entity.vo.DeviceCompanyVo" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+        SELECT * from  (
+        SELECT c.company_name companyName,d.building_name buildingName,t1.building_floor buildingFloor,t1.location location,d.latitude,d.longitude from db_device_manager.t_manager_smoke t1,db_device_manager.t_base_building d,db_device_manager.t_base_company c where t1.building_id = d.id and d.company_id = c.id
+        <if test="vo.companyId != null ">
+            and d.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT c.company_name deptName,d.building_name buildingName,t1.building_floor buildingFloor,t1.location location,d.latitude,d.longitude from db_device_manager.t_manager_waterpress t1,db_device_manager.t_base_building d,db_device_manager.t_base_company c where t1.building_id = d.id and d.company_id = c.id
+        <if test="vo.companyId != null ">
+            and d.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT c.company_name deptName,d.building_name buildingName,t1.building_floor buildingFloor,t1.location location,d.latitude,d.longitude from db_device_manager.t_manager_electric t1,db_device_manager.t_base_building d,db_device_manager.t_base_company c where t1.building_id = d.id and d.company_id = c.id
+        <if test="vo.companyId != null ">
+            and d.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        ) ta ;
+    </select>
+
+
+    <select id="alarmInfoDay" resultType="com.smart.device.common.install.entity.vo.DeviceCompanyVo" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+       SELECT ifnull(a.type,"1") type,a.create_time time,a.id,a.device_id deviceId,a.event_code,c.company_name companyName,d.company_id companyId,
+        t1.location,a.event_time,a.confirm_type,a.state,a.result,a.update_time updateTime,d.building_name buildingName,t1.building_floor buildingFloor,
+        d.latitude,d.longitude from db_device_message.t_alarm_smoke a,db_device_manager.t_manager_smoke t1,db_device_manager.t_base_building d,db_device_manager.t_base_company c
+        where  a.device_id = t1.device_id and t1.building_id = d.id and d.company_id = c.id and a.state = 0
+        <if test="vo.companyId != null ">
+            and d.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT ifnull(a.type,"1") type,a.create_time time,a.id,a.device_id deviceId,a.event_code,c.company_name companyName,d.company_id companyId,
+        t1.location,a.event_time,a.confirm_type,a.state,a.result,a.update_time updateTime,d.building_name buildingName,t1.building_floor buildingFloor,
+        d.latitude,d.longitude from db_device_message.t_alarm_waterpress a,db_device_manager.t_manager_waterpress t1,db_device_manager.t_base_building d ,db_device_manager.t_base_company c
+        where  a.device_id = t1.device_id and t1.building_id = d.id and d.company_id = c.id and a.state = 0
+        <if test="vo.companyId != null " >
+            and d.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+        union all
+        SELECT ifnull(a.type,"1") type,a.create_time time,a.id,a.device_id deviceId,a.event_code,c.company_name companyName,d.company_id companyId,
+        t1.location,a.event_time,a.confirm_type,a.state,a.result,a.update_time updateTime,d.building_name buildingName,t1.building_floor buildingFloor,
+        d.latitude,d.longitude from db_device_message.t_alarm_electric a,db_device_manager.t_manager_electric t1,db_device_manager.t_base_building d ,db_device_manager.t_base_company c
+        where  a.device_id = t1.device_id and t1.building_id = d.id and d.company_id = c.id and a.state = 0
+        <if test="vo.companyId != null ">
+            and d.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and d.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and d.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and d.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and d.town = #{vo.town}
+        </if>
+    </select>
+
+    <select id="MapdevicesGroupByLL" resultType="com.smart.device.common.message.vo.AlarmVo" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+        select count(*) num,t.latitude,t.longitude  from db_device_manager.t_base_building t
+        <where>
+            <if test="vo.companyId != null  ">
+                and t.company_id = #{vo.companyId}
+            </if>
+            <if test="vo.province != null and vo.province != ''">
+                and t.province = #{vo.province}
+            </if>
+            <if test="vo.city != null and vo.city != ''">
+                and t.city = #{vo.city}
+            </if>
+            <if test="vo.county != null and vo.county != ''">
+                and t.county = #{vo.county}
+            </if>
+            <if test="vo.town != null and vo.town != ''">
+                and t.town = #{vo.town}
+            </if>
+        </where>
+        GROUP BY t.latitude,t.longitude;
+    </select>
+    <select id="MapdevicesGroupByLLCount" resultType="java.lang.Long" parameterType="com.smart.device.common.install.entity.vo.DeviceCompanyVo">
+        select count(*) num from db_device_manager.t_base_building t
+        <where>
+            <if test="vo.companyId != null  ">
+                and t.company_id = #{vo.companyId}
+            </if>
+            <if test="vo.province != null and vo.province != ''">
+                and t.province = #{vo.province}
+            </if>
+            <if test="vo.city != null and vo.city != ''">
+                and t.city = #{vo.city}
+            </if>
+            <if test="vo.county != null and vo.county != ''">
+                and t.county = #{vo.county}
+            </if>
+            <if test="vo.town != null and vo.town != ''">
+                and t.town = #{vo.town}
+            </if>
+        </where>
+    </select>
+
+    <select id="alarmDevicesList" resultType="com.smart.device.common.message.vo.AlarmVo"
+            parameterType="com.smart.device.common.message.vo.AlarmVo">
+        SELECT c.company_name,c.create_time,c.incharge_name,c.incharge_phone,t1.building_name,t1.latitude,t1.longitude,t1.city,t1.county,t1.town,t1.address from  db_device_manager.t_base_building t1,db_device_manager.t_base_company c
+        where t1.company_id = c.id
+        <if test="vo.companyId != null  ">
+            and t1.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.longitude != null and vo.longitude != ''">
+            and t1.longitude = #{vo.longitude}
+        </if>
+        <if test="vo.latitude != null and vo.latitude != ''">
+            and t1.latitude = #{vo.latitude}
+        </if>
+    </select>
+
+</mapper>

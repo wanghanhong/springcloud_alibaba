@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.install.mapper.TBaseFirehydrantMapper">
+
+    <select id="baseFirehydrantList" parameterType="com.smart.device.common.install.entity.TBaseFirehydrant" resultType="com.smart.device.common.install.entity.TBaseFirehydrant">
+        SELECT * from t_base_firehydrant t where t.delete_flag = 0
+        <if test="vo.id != null ">
+            and t.id = #{vo.id}
+        </if>
+        <if test="vo.companyId != null ">
+            and t.company_name = #{vo.companyId}
+        </if>
+        <if test="vo.companyName != null and vo.companyName != ''">
+            and t.company_name like concat('%',#{vo.companyName},'%')
+        </if>
+        <if test="vo.opUserId != null ">
+            and t.op_user_id = #{vo.opUserId}
+        </if>
+        <if test="vo.province != null and vo.province != ''">
+            and t.province = #{vo.province}
+        </if>
+        <if test="vo.city != null and vo.city != ''">
+            and t.city = #{vo.city}
+        </if>
+        <if test="vo.county != null and vo.county != ''">
+            and t.county = #{vo.county}
+        </if>
+        <if test="vo.town != null and vo.town != ''">
+            and t.town = #{vo.town}
+        </if>
+        order by t.create_time desc
+    </select>
+
+    <select id="baseFirehydrantNoPage" parameterType="com.smart.device.common.install.entity.TBaseFirehydrant" resultType="com.smart.device.common.install.entity.TBaseFirehydrant">
+        SELECT * from t_base_firehydrant t where t.delete_flag = 0
+        <if test="vo.companyId != null  ">
+            and t.company_id = #{vo.companyId}
+        </if>
+        <if test="vo.buildingId != null  ">
+            and t.building_id = #{vo.buildingId}
+        </if>
+        <if test="vo.buildingFloor != null  ">
+            and t.building_floor = #{vo.buildingFloor}
+        </if>
+        order by t.create_time desc
+    </select>
+
+    <select id="getFirehydrantNumByFloor" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select count(*) countNum from t_base_firehydrant t where
+        t.building_id = #{buildingId}
+        <if test="buildingFloor != null  ">
+            and t.building_floor = #{buildingFloor}
+        </if>
+    </select>
+
+</mapper>

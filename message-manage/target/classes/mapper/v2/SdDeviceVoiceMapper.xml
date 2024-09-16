@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.message.manage.monitor.dao.SdDeviceVoiceMapper">
+
+    <resultMap type="com.smart.message.manage.monitor.entity.SdDeviceVoice" id="SdDeviceVoiceMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="deviceId" column="device_id" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="contactMan" column="contact_man" jdbcType="VARCHAR"/>
+        <result property="sendTime" column="send_time" jdbcType="TIMESTAMP"/>
+        <result property="feedbackTime" column="feedback_time" jdbcType="TIMESTAMP"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="feedbackResult" column="feedback_result" jdbcType="VARCHAR"/>
+        <result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+</mapper>

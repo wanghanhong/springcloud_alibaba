@@ -1,15 +1,0 @@
-
-Q	java:S125b"<This block of commented-out lines of code should be removed.(ŸÚû
-h
-java:S37768"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(Çæş…
-Q	java:S125{"<This block of commented-out lines of code should be removed.(…»®ã
-|
-java:S3008%"ZRename this field "LOCAL_DATE_TIME" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ˆñ¸Ïøÿÿÿÿ8Ï©‹£”/
-œ
-java:S1186."€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÏÒÉ¢ùÿÿÿÿ
-r
-java:S3008&"URename this field "LOCAL_DATE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ó€ØÌ8Ï©‹£”/
-q
-java:S3008!"[Rename this field "DICT_TEXT_SUFFIX" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Œ»è¾
-<
-java:S1905@"'Remove this unnecessary cast to "List".(ñí

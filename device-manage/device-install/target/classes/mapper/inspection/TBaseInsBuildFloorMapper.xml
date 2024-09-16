@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.device.install.mapper.inspection.TBaseInsBuildFloorMapper">
+
+    <select id="selecByInsAndBuildAndFloor" parameterType="com.smart.device.install.entity.vo.InsBuildFloorVo" resultType="com.smart.device.install.entity.vo.InsBuildFloorVo">
+        SELECT t1.company_name,t.id insBuildFloorId,t.* from t_base_ins_build_floor t,t_base_inspection t1,t_base_ins_build t2
+				where t.ins_build_id = t2.id and  t2.inspection_id = t1.id  and t.floor_point_num > 0
+        <if test="vo.inspectionId != null ">
+            and t1.id = #{vo.inspectionId}
+        </if>
+        <if test="vo.buildingId != null ">
+            and t.building_id = #{vo.buildingId}
+        </if>
+        <if test="vo.floorNum != null ">
+            and t.floor_num = #{vo.floorNum}
+        </if>
+        <if test="vo.status != null ">
+            and t.status = #{vo.status}
+        </if>
+         order by t.floor_num ${vo.sortno}
+    </select>
+
+    <select id="selecByInsBuildAndFloor" parameterType="com.smart.device.install.entity.vo.InsBuildFloorVo" resultType="com.smart.device.install.entity.vo.InsBuildFloorVo">
+        SELECT t.id insBuildFloorId,t.* from t_base_ins_build_floor t
+        <where>
+            <if test="vo.insBuildFloorId != null ">
+                and t.id = #{vo.insBuildFloorId}
+            </if>
+            <if test="vo.insBuildId != null ">
+                and t.ins_build_id = #{vo.insBuildId}
+            </if>
+            <if test="vo.floorNum != null ">
+                and t.floor_num = #{vo.floorNum}
+            </if>
+        </where>
+          limit 1;
+    </select>
+
+    <select id="getFloorCountGroupByStatus" resultType="java.util.Map">
+       select * from (select count(*) count0 from t_base_ins_build_floor t where t.floor_point_num and t.ins_build_id = #{insBuildId} ) t1,
+       (select count(*) count2 from t_base_ins_build_floor t where t.floor_point_num and t.ins_build_id = #{insBuildId} and t.status = 2) t2
+    </select>
+
+</mapper>
